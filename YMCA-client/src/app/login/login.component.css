@@ -67,6 +67,10 @@ input:focus{
     color: black;
     background-color: white;
 }
+
+.reg-heading{
+    float: right;
+}
     
 .links{
     color: white;
