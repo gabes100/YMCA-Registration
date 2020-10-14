@@ -7,12 +7,14 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RegisterComponent } from './register/register.component';
+import { ProfileNavComponent } from './profile-nav/profile-nav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProfileNavComponent
   ],
   imports: [
     BrowserModule,
