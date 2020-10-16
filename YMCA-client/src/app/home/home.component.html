@@ -1,5 +1,9 @@
-<div class="container">
+<div class="container container-top">
     <div class="card main">
+        <div class="card-header">
+            <h2 style="text-align: center;">YMCA Program Listings</h2>
+            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" data-target="#programSignUp">Create New Program</button>
+        </div>
         <div class="card-body menu">
             <div class="container">
                 <table class="table table-hover">
@@ -21,8 +25,8 @@
                       <td> 
                         <div>
                           <button id="signUpBtn" class="btn btn-primary" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
-                          <button class="btn btn-secondary" data-toggle="modal" data-target="#programSignUp">Modify</button>
-                          <button class="btn btn-danger" data-toggle="modal" data-target="#removeProgram">Delete</button>
+                          <button class="btn btn-secondary" data-toggle="modal" data-target="#programSignUp"><i class="fa fa-cog"></i></button>
+                          <button class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
                         </div>
                        </td>
                     </tr>
