@@ -1,0 +1,94 @@
+<div class="container container-top">
+    <div class="card main">
+        <div class="card-header">
+            <h2 style="text-align: center;">YMCA Program Listings</h2>
+            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" data-target="#programSignUp">Create New Program</button>
+        </div>
+        <div class="card-body menu">
+            <div class="container">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Program Name</th>
+                      <th>Location</th>
+                      <th>Time/Date</th>
+                      <th>Capacity Left</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Test</td>
+                      <td>Test</td>
+                      <td>Test</td>
+                      <td>Test</td>
+                      <td> 
+                        <div>
+                          <button id="signUpBtn" class="btn btn-primary" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
+                          <button class="btn btn-secondary" data-toggle="modal" data-target="#programSignUp"><i class="fa fa-cog"></i></button>
+                          <button class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
+                        </div>
+                       </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="programSignUp" tabindex="-1" role="dialog" aria-labelledby="signUp" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signUp">Program Sign Up</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                      <span>This is a description of the Program. This will be loaded from the database soon<br><br></span>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                      <span><strong>Fee</strong></span>
+                  </div>
+                   <div class="col">
+                      <span>$1000</span>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary float-right" data-dismiss="modal" (click)="signUp()">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="removeProgram" tabindex="-1" role="dialog" aria-labelledby="removeProgram" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeProgram">Remove Program</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                      <span>Are you sure you want to remove this program?<br><br></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary float-right">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
