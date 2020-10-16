@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
 
         },
         err =>{
-          alert("User not found");
+          alert("Invalid username or password");
         }
       );
     }
