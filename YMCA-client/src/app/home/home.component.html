@@ -11,20 +11,20 @@
                     <tr>
                       <th>Program Name</th>
                       <th>Location</th>
-                      <th>Time/Date</th>
+                      <th>Date/Time</th>
                       <th>Capacity Left</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Test</td>
-                      <td>Test</td>
-                      <td>Test</td>
-                      <td>Test</td>
+                    <tr *ngFor="let program of programs">
+                      <td>{{program.name}}</td>
+                      <td>{{program.location}}</td>
+                      <td>{{program.date}} {{program.time}}</td>
+                      <td>{{program.capacity}}</td>
                       <td> 
                         <div>
-                          <button id="signUpBtn" class="btn btn-primary" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
+                          <button id="{{program._id}}" class="btn btn-primary" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
                           <button class="btn btn-secondary" data-toggle="modal" data-target="#programSignUp"><i class="fa fa-cog"></i></button>
                           <button class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
                         </div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-primary float-right">Confirm</button>
+                        <button type="button" class="btn btn-primary float-right" (click)="removeProgram()">Confirm</button>
                     </div>
                 </div>
             </div>
