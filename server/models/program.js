@@ -6,7 +6,8 @@ let programSchema = new mongoose.Schema(
         location : String,
         fee : Number,
         time : String,
-        date : String,
+        day : String,
+	   	date : String,
         description : String
    }
 )
