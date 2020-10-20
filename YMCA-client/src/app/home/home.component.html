@@ -2,7 +2,7 @@
     <div class="card main">
         <div class="card-header">
             <h2 style="text-align: center;">YMCA Program Listings</h2>
-            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" data-target="#programCreate">Create New Program</button>
+            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" (click)="openCreateModal()" data-target="#programCreate">Create New Program</button>
         </div>
         <div class="card-body menu">
             <div class="container">
@@ -26,8 +26,8 @@
                       <td>{{program.date}}</td>
                       <td> 
                         <div>
-                          <button id="{{program._id}}" class="btn btn-primary" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
-                          <button class="btn btn-secondary" data-toggle="modal" data-target="#programSignUp"><i class="fa fa-cog"></i></button>
+                          <button id="{{program._id}}" class="btn btn-primary" (click)="openProgamModal(program)" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
+                          <button class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(program)" data-target="#programCreate"><i class="fa fa-cog"></i></button>
                           <button class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
                         </div>
                        </td>
@@ -48,24 +48,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col">
-                      <span>This is a description of the Program. This will be loaded from the database soon<br><br></span>
+              <form [formGroup]="programViewForm">
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <textarea disabled style="border: none" class="form-control" rows="3" formControlName="description"></textarea>
                   </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                      <span><strong>Fee</strong></span>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="fee">Fee</label>
+                    <input disabled style="border: none" class="form-control" id="fee" formControlName="fee">
                   </div>
-                   <div class="col">
-                      <span>$1000</span>
+                  <div class="form-group col-md-6">
+                    <label for="capacity">Capacity Left</label>
+                    <input disabled style="border: none" class="form-control" id="capacity" formControlName="capacity">
                   </div>
                 </div>
-                <div class="row">
+                <div class="form-row">
                     <div class="col">
                         <button type="button" class="btn btn-primary float-right" data-dismiss="modal" (click)="signUp()">Confirm</button>
                     </div>
                 </div>
+              </form>
             </div>
         </div>
     </div>
@@ -98,33 +102,45 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="programCreate">Create New Program</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 *ngIf="isModding === false" class="modal-title" id="programCreate">Create New Program</h5>
+                <h5 *ngIf="isModding === true" class="modal-title" id="programCreate">Modify Program</h5>
+                <button type="button" class="close" (click)="resetForm(programForm)" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form [formGroup]="programForm">
                     <div class="form-row">
                       <div class="form-group col-md-6">
                         <label for="programName">Program Name</label>
-                        <input type="email" class="form-control" id="programName" placeholder="Program Name">
+                        <input type="text" class="form-control" id="programName" formControlName="programName" placeholder="Program Name">
                       </div>
                       <div class="form-group col-md-6">
                         <label for="location">Location</label>
-                        <input type="text" class="form-control" id="location" placeholder="Upper Gym">
+                        <input type="text" class="form-control" id="location" formControlName="location" placeholder="Upper Gym">
                       </div>
                     </div>
                     <div class="form-row">
                       <div class="form-group col-md-12">
                         <label for="description">Description</label>
-                        <input type="text" class="form-control" id="description" placeholder="Description of your program">
+                        <textarea type="text" class="form-control" rows="3" id="description" formControlName="description" 
+                        placeholder="Description of your program"></textarea> 
                       </div>
                     </div>
                     <div class="form-row">
                       <div class="form-group col-md-6">
+                        <label for="capacity">Capacity</label>
+                         <input type="number" class="form-control" id="capacity" formControlName="capacity" placeholder="10">
+                       </div>
+                     <div class="form-group col-md-6">
+                         <label for="fee">Fee</label>
+                         <input type="number" class="form-control" formControlName="fee" placeholder="$60" id="fee">
+                       </div>
+                     </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
                         <label for="inputDay">Day of Week</label>
-                        <select id="inputDay" class="form-control">
+                        <select id="inputDay" class="form-control" formControlName="inputDay">
                           <option selected>Choose Day.</option>
                           <option>Sunday</option>
                           <option>Monday</option>
@@ -137,20 +153,22 @@
                       </div>
                       <div class="form-group col-md-6">
                         <label for="inputTime">Time</label>
-                        <input type="time" class="form-control" id="time">
+                        <input type="time" class="form-control" formControlName="inputTime" id="time">
                       </div>
                     </div>
+                    
                     <div class="form-row">
                       <div class="form-group col-md-6">
                         <label for="dateStart">Date Start</label>
-                        <input type="date" class="form-control" id="dateStart">
+                        <input type="date" class="form-control" formControlName="dateStart" id="dateStart">
                       </div>
                       <div class="form-group col-md-6">
                         <label for="dateEnd">Date End</label>
-                        <input type="date" class="form-control" id="dateEnd">
+                        <input type="date" class="form-control" formControlName="dateEnd" id="dateEnd">
                       </div>
                     </div>
-                    <button type="submit" class="btn btn-primary float-right">Create</button>
+                    <button *ngIf="isModding === false" type="submit" class="btn btn-primary float-right">Create</button>
+                    <button *ngIf="isModding === true" type="submit" class="btn btn-primary float-right">Save</button>
                 </form>
             </div>
         </div>
