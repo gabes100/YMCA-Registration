@@ -2,7 +2,7 @@
     <div class="card main">
         <div class="card-header">
             <h2 style="text-align: center;">YMCA Program Listings</h2>
-            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" (click)="openCreateModal()" data-target="#programCreate">Create New Program</button>
+            <button *ngIf="isStaff=== true || debug" id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" (click)="openCreateModal()" data-target="#programCreate">Create New Program</button>
         </div>
         <div class="card-body menu">
             <div class="container">
@@ -26,9 +26,10 @@
                       <td>{{program.date}}</td>
                       <td> 
                         <div>
-                          <button id="{{program._id}}" class="btn btn-primary" (click)="openProgamModal(program)" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
-                          <button class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(program)" data-target="#programCreate"><i class="fa fa-cog"></i></button>
-                          <button class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
+                          <button *ngIf="!isStaff || debug" id="{{program._id}}" class="btn btn-primary" (click)="openProgamModal(program)" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
+                          <button *ngIf="isStaff" disabled class="btn btn-primary">Sign Up</button>
+                          <button *ngIf="isStaff || debug" class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(program)" data-target="#programCreate"><i class="fa fa-cog"></i></button>
+                          <button *ngIf="isStaff || debug" class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
                         </div>
                        </td>
                     </tr>
@@ -51,17 +52,17 @@
               <form [formGroup]="programViewForm">
                 <div class="form-row">
                   <div class="form-group col-md-12">
-                    <textarea disabled style="border: none" class="form-control" rows="3" formControlName="description"></textarea>
+                    <textarea readonly style="border: none" class="form-control" rows="3" formControlName="description"></textarea>
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label for="fee">Fee</label>
-                    <input disabled style="border: none" class="form-control" id="fee" formControlName="fee">
+                    <input readonly style="border: none" class="form-control" id="fee" formControlName="fee">
                   </div>
                   <div class="form-group col-md-6">
                     <label for="capacity">Capacity Left</label>
-                    <input disabled style="border: none" class="form-control" id="capacity" formControlName="capacity">
+                    <input readonly style="border: none" class="form-control" id="capacity" formControlName="capacity">
                   </div>
                 </div>
                 <div class="form-row">
@@ -167,7 +168,7 @@
                         <input type="date" class="form-control" formControlName="dateEnd" id="dateEnd">
                       </div>
                     </div>
-                    <button *ngIf="isModding === false" type="submit" class="btn btn-primary float-right">Create</button>
+                    <button *ngIf="isModding === false" type="submit" data-dismiss="modal" (click) = "updateProgram()" class="btn btn-primary float-right">Create</button>
                     <button *ngIf="isModding === true" type="submit" class="btn btn-primary float-right">Save</button>
                 </form>
             </div>

@@ -30,7 +30,16 @@ async function mockUser(){
             lastName : "Doe",
             member : true,
             staff : false
+        },
+        {
+            username : "sally.smith",
+            password : bcrypt.hashSync("123456789", 10),
+            firstName : "Sally",
+            lastName : "Smith",
+            member : false,
+            staff : false
         }
+
     ];
 
     await User.insertMany(users);

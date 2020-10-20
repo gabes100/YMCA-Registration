@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
   programs : Program[];
   programForm: FormGroup;
   programViewForm: FormGroup;
+
+  debug: Boolean = true; //REMOVE THIS BEFORE SUBMIT
   
   constructor( 
     private router : Router,
@@ -31,7 +33,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.isStaff = this.user.staff; 
-    this.isMember = this.user.member; 
+    this.isMember = this.user.member;
 
     this.api.getPrograms().subscribe(programs =>{
       this.programs = programs;
@@ -65,8 +67,11 @@ export class HomeComponent implements OnInit {
   }
 
   openProgamModal(data : Program): void {
+    const discount = Math.ceil(<number>data.fee *  0.5);
+    const fee = this.isMember ? discount: data.fee;
+
      this.programViewForm.patchValue({
-      fee: "$" + data.fee + ".00",
+      fee: "$" + fee + ".00",
       capacity: data.capacity,
       description: data.description,
      });
@@ -92,9 +97,9 @@ export class HomeComponent implements OnInit {
     });
  }
 
- openCreateModal(): void {
-  this.isModding = false;
-}
+  openCreateModal(): void {
+    this.isModding = false;
+  }
 
   removeProgram() : void{
     // TODO: Need to get id of program we are deleting
@@ -110,5 +115,21 @@ export class HomeComponent implements OnInit {
         alert("Delete failed!");
       }
     })
+  }
+
+  updateProgram() : void {
+    let body = {
+      name : this.programForm.controls['programName'].value,
+      location : this.programForm.controls['location'].value,
+      description : this.programForm.controls['description'].value,
+      fee : this.programForm.controls['fee'].value,
+      capacity : this.programForm.controls['capacity'].value,
+      time : this.programForm.controls['inputTime'].value,
+      day : this.programForm.controls['inputDay'].value,
+      date : this.programForm.controls['dateStart'].value + " - " + this.programForm.controls['dateEnd'].value
+    };
+
+    console.log(body);
+    this.api.createProgram(body);
   }
 }
