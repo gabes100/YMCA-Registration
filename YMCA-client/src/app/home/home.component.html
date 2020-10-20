@@ -2,17 +2,18 @@
     <div class="card main">
         <div class="card-header">
             <h2 style="text-align: center;">YMCA Program Listings</h2>
-            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" data-target="#programSignUp">Create New Program</button>
+            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" data-target="#programCreate">Create New Program</button>
         </div>
         <div class="card-body menu">
             <div class="container">
                 <table class="table table-hover">
                   <thead>
-                    <tr>
+                    <tr class="table-header">
                       <th>Program Name</th>
                       <th>Location</th>
-                      <th>Date/Time</th>
-                      <th>Capacity Left</th>
+                      <th>Day</th>
+                      <th>Time</th>
+                      <th>Date</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -20,8 +21,9 @@
                     <tr *ngFor="let program of programs">
                       <td>{{program.name}}</td>
                       <td>{{program.location}}</td>
-                      <td>{{program.date}} {{program.time}}</td>
-                      <td>{{program.capacity}}</td>
+                      <td>{{program.day}}</td> 
+                      <td>{{program.time}}</td>
+                      <td>{{program.date}}</td>
                       <td> 
                         <div>
                           <button id="{{program._id}}" class="btn btn-primary" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
@@ -88,6 +90,68 @@
                         <button type="button" class="btn btn-primary float-right" (click)="removeProgram()">Confirm</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="programCreate" tabindex="-1" role="dialog" aria-labelledby="programCreate" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="programCreate">Create New Program</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="programName">Program Name</label>
+                        <input type="email" class="form-control" id="programName" placeholder="Program Name">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="location">Location</label>
+                        <input type="text" class="form-control" id="location" placeholder="Upper Gym">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-12">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control" id="description" placeholder="Description of your program">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="inputDay">Day of Week</label>
+                        <select id="inputDay" class="form-control">
+                          <option selected>Choose Day.</option>
+                          <option>Sunday</option>
+                          <option>Monday</option>
+                          <option>Tuesday</option>
+                          <option>Wednesday</option>
+                          <option>Thursday</option>
+                          <option>Friday</option>
+                          <option>Saturday</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="inputTime">Time</label>
+                        <input type="time" class="form-control" id="time">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="dateStart">Date Start</label>
+                        <input type="date" class="form-control" id="dateStart">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="dateEnd">Date End</label>
+                        <input type="date" class="form-control" id="dateEnd">
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary float-right">Create</button>
+                </form>
             </div>
         </div>
     </div>
