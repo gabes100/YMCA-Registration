@@ -3,6 +3,7 @@ var router = express.Router();
 var bcrypt = require('bcrypt');
 
 let User = require('../models/user');
+let Program = require('../models/program');
 
 
 // Login
@@ -42,6 +43,76 @@ router.post('/login', function(req, res, next) {
               }
           });
       }
+  });
+});
+
+// Register
+router.post('/register', function(req, res, next) {
+  req.session.regenerate((err) => {
+      if(err){
+        res.status(402).json();
+      }
+      else{
+          let firstName = req.body.firstName || '';
+          let lastName = req.body.lastName || '';
+          let username = req.body.username || '';
+          let password = req.body.password || '';
+
+          let newUser = {
+            firstName : req.body.firstName,
+            lastName : req.body.lastName,
+            username : req.body.username,
+            password : bcrypt.hashSync(req.body.password, 10),
+            member : false,
+            staff : false
+          }
+
+          User.findOne({username : username}, (err, user) => {
+              if(!user) {
+                user = new User(newUser);
+                req.session.user = user;
+                user.save();
+
+                delete user['password'];
+                res.json(user);
+
+              }
+              else{
+                res.status(402).json();
+              }
+          });
+      }
+  });
+});
+
+// Gets the programs
+router.get('/programs', function(req, res, next){
+  Program.find({}, (err, programs) => {
+    if(err){
+      res.status(500).send("Error in programs");
+    }
+    else{
+      res.json(programs)
+    }
+  });
+});
+
+// Creates a new program
+router.post('/program', function(req, res, next){
+  let program = new Program(req.body);
+  program.save();
+  res.json(program);
+});
+
+// Deletes a program
+router.delete('/program', function(req, res, next){
+  Program.deleteOne({"_id" : req.query.program}, (err, result) => {
+    if(err){
+      res.status(500).send("Error in deleting program");
+    }
+    else{
+      res.json(result);
+    }
   });
 });
 

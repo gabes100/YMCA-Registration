@@ -2,31 +2,34 @@
     <div class="card main">
         <div class="card-header">
             <h2 style="text-align: center;">YMCA Program Listings</h2>
-            <button id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" data-target="#programSignUp">Create New Program</button>
+            <button *ngIf="isStaff=== true || debug" id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" (click)="openCreateModal()" data-target="#programCreate">Create New Program</button>
         </div>
         <div class="card-body menu">
             <div class="container">
                 <table class="table table-hover">
                   <thead>
-                    <tr>
+                    <tr class="table-header">
                       <th>Program Name</th>
                       <th>Location</th>
-                      <th>Time/Date</th>
-                      <th>Capacity Left</th>
+                      <th>Day</th>
+                      <th>Time</th>
+                      <th>Date</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Test</td>
-                      <td>Test</td>
-                      <td>Test</td>
-                      <td>Test</td>
+                    <tr *ngFor="let program of programs">
+                      <td>{{program.name}}</td>
+                      <td>{{program.location}}</td>
+                      <td>{{program.day}}</td> 
+                      <td>{{program.time}}</td>
+                      <td>{{program.date}}</td>
                       <td> 
                         <div>
-                          <button id="signUpBtn" class="btn btn-primary" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
-                          <button class="btn btn-secondary" data-toggle="modal" data-target="#programSignUp"><i class="fa fa-cog"></i></button>
-                          <button class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
+                          <button *ngIf="!isStaff || debug" id="{{program._id}}" class="btn btn-primary" (click)="openProgamModal(program)" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
+                          <button *ngIf="isStaff && !debug" disabled class="btn btn-primary">Sign Up</button>
+                          <button *ngIf="isStaff || debug" class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(program)" data-target="#programCreate"><i class="fa fa-cog"></i></button>
+                          <button *ngIf="isStaff || debug" class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
                         </div>
                        </td>
                     </tr>
@@ -46,24 +49,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col">
-                      <span>This is a description of the Program. This will be loaded from the database soon<br><br></span>
+              <form [formGroup]="programViewForm">
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <textarea readonly style="border: none" class="form-control" rows="3" formControlName="description"></textarea>
                   </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                      <span><strong>Fee</strong></span>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="fee">Fee</label>
+                    <input readonly style="border: none" class="form-control" id="fee" formControlName="fee">
                   </div>
-                   <div class="col">
-                      <span>$1000</span>
+                  <div class="form-group col-md-6">
+                    <label for="capacity">Capacity Left</label>
+                    <input readonly style="border: none" class="form-control" id="capacity" formControlName="capacity">
                   </div>
                 </div>
-                <div class="row">
+                <div class="form-row">
                     <div class="col">
                         <button type="button" class="btn btn-primary float-right" data-dismiss="modal" (click)="signUp()">Confirm</button>
                     </div>
                 </div>
+              </form>
             </div>
         </div>
     </div>
@@ -85,9 +92,88 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-primary float-right">Confirm</button>
+                        <button type="button" class="btn btn-primary float-right" (click)="removeProgram()">Confirm</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="programCreate" tabindex="-1" role="dialog" aria-labelledby="programCreate" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 *ngIf="isModding === false" class="modal-title" id="programCreate">Create New Program</h5>
+                <h5 *ngIf="isModding === true" class="modal-title" id="programCreate">Modify Program</h5>
+                <button type="button" class="close" (click)="resetForm(programForm)" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="programForm">
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="programName">Program Name</label>
+                        <input type="text" class="form-control" id="programName" formControlName="programName" placeholder="Program Name">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="location">Location</label>
+                        <input type="text" class="form-control" id="location" formControlName="location" placeholder="Upper Gym">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-12">
+                        <label for="description">Description</label>
+                        <textarea type="text" class="form-control" rows="3" id="description" formControlName="description" 
+                        placeholder="Description of your program"></textarea> 
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="capacity">Capacity</label>
+                         <input type="number" class="form-control" id="capacity" formControlName="capacity" placeholder="10">
+                       </div>
+                     <div class="form-group col-md-6">
+                         <label for="fee">Fee</label>
+                         <input type="number" class="form-control" formControlName="fee" placeholder="$60" id="fee">
+                       </div>
+                     </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-4">
+                        <label for="day">Day of Week</label>
+                        <select id="day" class="form-control" formControlName="day">
+                          <option selected>Choose Day.</option>
+                          <option>Sunday</option>
+                          <option>Monday</option>
+                          <option>Tuesday</option>
+                          <option>Wednesday</option>
+                          <option>Thursday</option>
+                          <option>Friday</option>
+                          <option>Saturday</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="timeStart">Time Start</label>
+                        <input type="time" class="form-control" formControlName="timeStart" placeholder="12:00am" id="timeStart">
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="timeEnd">Time End</label>
+                        <input type="time" class="form-control" formControlName="timeEnd" id="timeEnd">
+                      </div>
+                    </div> 
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="dateStart">Date Start</label>
+                        <input type="date" class="form-control" formControlName="dateStart" id="dateStart">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="dateEnd">Date End</label>
+                        <input type="date" class="form-control" formControlName="dateEnd" id="dateEnd">
+                      </div>
+                    </div>
+                    <button *ngIf="isModding === false" type="submit" data-dismiss="modal" (click) = "updateProgram()" class="btn btn-primary float-right">Create</button>
+                    <button *ngIf="isModding === true" type="submit" class="btn btn-primary float-right">Save</button>
+                </form>
             </div>
         </div>
     </div>

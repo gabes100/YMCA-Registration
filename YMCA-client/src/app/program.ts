@@ -2,7 +2,9 @@ export class Program {
     name : String;
     location : String;
     description : String;
+    capacity : Number;
     time : String;
+    day : String
     date : String;
     fee : Number;
     
@@ -12,6 +14,8 @@ export class Program {
         this.location = obj.location;
         this.description = obj.description;
         this.time = obj.time;
+        this.day = obj.day;
+        this.capacity = obj.capacity;
         this.date = obj.date;
         this.fee = obj.fee;
     }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-//import { DataService } from '../data.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-profile-nav',
@@ -9,13 +9,14 @@ import { Router } from '@angular/router';
 })
 export class ProfileNavComponent implements OnInit {
 
-  constructor(private router : Router) { }
+  constructor(private router : Router,
+    private data : DataService) { }
 
   ngOnInit(): void {
   }
 
   logout(){
-    //this.data.changeUser(Object);
+    this.data.changeUser(Object);
     this.router.navigate(['/login']);
   }
 
