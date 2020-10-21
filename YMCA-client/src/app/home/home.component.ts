@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   programForm: FormGroup;
   programViewForm: FormGroup;
 
-  debug: Boolean = true; //REMOVE THIS BEFORE SUBMIT
+  debug: Boolean = false; //REMOVE THIS BEFORE SUBMIT
   
   constructor( 
     private router : Router,
@@ -129,7 +129,9 @@ export class HomeComponent implements OnInit {
       date : this.programForm.controls['dateStart'].value + " - " + this.programForm.controls['dateEnd'].value
     };
 
-    console.log(body);
-    this.api.createProgram(body);
+    //console.log(body);
+    this.api.createProgram(body).subscribe(newProgram =>{
+      console.log(newProgram)
+    });
   }
 }
