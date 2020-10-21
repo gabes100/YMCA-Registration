@@ -27,7 +27,7 @@
                       <td> 
                         <div>
                           <button *ngIf="!isStaff || debug" id="{{program._id}}" class="btn btn-primary" (click)="openProgamModal(program)" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
-                          <button *ngIf="isStaff" disabled class="btn btn-primary">Sign Up</button>
+                          <button *ngIf="isStaff && !debug" disabled class="btn btn-primary">Sign Up</button>
                           <button *ngIf="isStaff || debug" class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(program)" data-target="#programCreate"><i class="fa fa-cog"></i></button>
                           <button *ngIf="isStaff || debug" class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
                         </div>
@@ -139,9 +139,9 @@
                        </div>
                      </div>
                     <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="inputDay">Day of Week</label>
-                        <select id="inputDay" class="form-control" formControlName="inputDay">
+                      <div class="form-group col-md-4">
+                        <label for="day">Day of Week</label>
+                        <select id="day" class="form-control" formControlName="day">
                           <option selected>Choose Day.</option>
                           <option>Sunday</option>
                           <option>Monday</option>
@@ -152,12 +152,15 @@
                           <option>Saturday</option>
                         </select>
                       </div>
-                      <div class="form-group col-md-6">
-                        <label for="inputTime">Time</label>
-                        <input type="time" class="form-control" formControlName="inputTime" id="time">
+                      <div class="form-group col-md-4">
+                        <label for="timeStart">Time Start</label>
+                        <input type="time" class="form-control" formControlName="timeStart" placeholder="12:00am" id="timeStart">
                       </div>
-                    </div>
-                    
+                      <div class="form-group col-md-4">
+                        <label for="timeEnd">Time End</label>
+                        <input type="time" class="form-control" formControlName="timeEnd" id="timeEnd">
+                      </div>
+                    </div> 
                     <div class="form-row">
                       <div class="form-group col-md-6">
                         <label for="dateStart">Date Start</label>

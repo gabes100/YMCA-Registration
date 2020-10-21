@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { User } from '../user';
 import { Program } from '../program';
 import { FormControl, FormGroup} from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -43,10 +44,11 @@ export class HomeComponent implements OnInit {
       programName: new FormControl(''),
       location: new FormControl(''),
       description: new FormControl(''),
-      inputDay: new FormControl(''),
       fee: new FormControl(''),
       capacity: new FormControl(''),
-      inputTime: new FormControl(''),
+      day: new FormControl(''),
+      timeStart: new FormControl(''),
+      timeEnd: new FormControl(''),
       dateStart: new FormControl(''),
       dateEnd: new FormControl('')
     });
@@ -88,14 +90,42 @@ export class HomeComponent implements OnInit {
       programName: data.name,
       location: data.location,
       description: data.description,
-      inputDay: data.day,
+      day: data.day,
       fee: data.fee,
       capacity: data.capacity,
-      inputTime: data.time,
+      timeStart: data.time.substring(0,data.time.indexOf('-')),
+      timeEnd: data.time.substring(data.time.indexOf('-')+2),
       dateStart: data.date.substring(0,data.date.indexOf('-')),
       dateEnd: data.date.substring(data.date.indexOf('-')+2)
     });
  }
+
+  createDate(inputDate: string) : string {
+    const year = inputDate.substring(0, inputDate.indexOf("-"));
+    const month = inputDate.substring(inputDate.indexOf("-") +1, inputDate.lastIndexOf("-"));
+    const day = inputDate.substring(inputDate.lastIndexOf("-") + 1);
+
+    return month + "/" + day + "/" + year;
+  }
+
+  createTime(inputTime: string) : string {
+    const hour = inputTime.substring(0,  inputTime.indexOf(":"));
+    const minute = inputTime.substring(inputTime.indexOf(":")); //has ':' in it still
+    const hourValue:number = +hour;
+
+    let retTime = "";
+    
+    if (hourValue < 12&& hourValue != 0){
+      retTime = hourValue  + minute + "am"
+    } else if (hourValue  == 12) {
+      retTime = "12" + minute + "pm";
+    } else if (hourValue  == 0 || hourValue  == 24) {
+      retTime = "12" + minute + "am";
+    }else{
+      retTime = hourValue - 12 +  minute + "pm";
+    }
+    return retTime;
+  }
 
   openCreateModal(): void {
     this.isModding = false;
@@ -118,20 +148,23 @@ export class HomeComponent implements OnInit {
   }
 
   updateProgram() : void {
+
+    console.log(this.programForm.controls['dateStart'].value);
     let body = {
       name : this.programForm.controls['programName'].value,
       location : this.programForm.controls['location'].value,
       description : this.programForm.controls['description'].value,
       fee : this.programForm.controls['fee'].value,
       capacity : this.programForm.controls['capacity'].value,
-      time : this.programForm.controls['inputTime'].value,
-      day : this.programForm.controls['inputDay'].value,
-      date : this.programForm.controls['dateStart'].value + " - " + this.programForm.controls['dateEnd'].value
+      time : this.createTime(this.programForm.controls['timeStart'].value)  + " - " + this.createTime(this.programForm.controls['timeEnd'].value),
+      day : this.programForm.controls['day'].value,
+      date : this.createDate(this.programForm.controls['dateStart'].value) + " - " + this.createDate(this.programForm.controls['dateEnd'].value)
     };
 
-    //console.log(body);
     this.api.createProgram(body).subscribe(newProgram =>{
-      console.log(newProgram)
+      console.log(newProgram);
     });
+
+    window.location.reload(); //reload data
   }
 }
