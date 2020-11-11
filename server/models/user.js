@@ -6,7 +6,10 @@ let userSchema = new mongoose.Schema(
       firstName : {type : String},
       lastName : {type : String},
       member : {type : Boolean},
-      staff : {type : Boolean}
+      staff : {type : Boolean},
+      programs : [
+         {type : mongoose.Schema.Types.ObjectId, ref : 'Program'}
+      ]
    }
 )
 

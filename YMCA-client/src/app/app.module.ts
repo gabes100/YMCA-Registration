@@ -10,6 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RegisterComponent } from './register/register.component';
 import { ProfileNavComponent } from './profile-nav/profile-nav.component';
 import { HomeComponent } from './home/home.component';
+import { UserHomeComponent } from './user-home/user-home.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HomeComponent } from './home/home.component';
     LoginComponent,
     RegisterComponent,
     ProfileNavComponent,
-    HomeComponent
+    HomeComponent,
+    UserHomeComponent
   ],
   imports: [
     BrowserModule,

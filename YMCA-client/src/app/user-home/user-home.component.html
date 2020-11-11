@@ -1,0 +1,32 @@
+<div class="container container-top">
+    <div class="card main">
+        <div class="card-header">
+            <h2 style="text-align: center;">My Programs</h2>
+            <button class="btn btn-primary pull-right" [routerLink]="['/home']">More Programs</button>
+        </div>
+        <div class="card-body menu">
+            <div class="container">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Program Name</th>
+                            <th>Location</th>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let program of programs">
+                            <td>{{program.name}}</td>
+                            <td>{{program.location}}</td>
+                            <td>{{program.day}}</td> 
+                            <td>{{program.time}}</td>
+                            <td>{{program.date}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

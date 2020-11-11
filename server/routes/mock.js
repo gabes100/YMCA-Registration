@@ -49,7 +49,7 @@ async function mockProgram(){
     let programs = [
            {
             name : "Advanced Swimming Lessons",
-            capacity : 10,
+            capacity : 9,
             location : "YMCA pool",
             fee : 96,
             time : "1:00pm - 1:30pm",
@@ -59,7 +59,7 @@ async function mockProgram(){
            },
            {
             name : "Log Rolling",
-            capacity : 4,
+            capacity : 3,
             location : "YMCA pool",
             fee : 110,
             time : "2:00pm - 4:00pm",
@@ -69,7 +69,7 @@ async function mockProgram(){
            },
            {
             name : "Yoga",
-            capacity : 20,
+            capacity : 19,
             location : "Upper Gym",
             fee : 65,
             time : "6:00pm - 7:00pm",
@@ -80,7 +80,7 @@ async function mockProgram(){
            },
            {
             name : "Personal Training Session 1",
-            capacity : 1,
+            capacity : 0,
             location : "Lower Gym",
             fee : 50,
             time : "9:00am - 10:00am",
@@ -90,7 +90,7 @@ async function mockProgram(){
            },
            {
             name : "Personal Training Session 2",
-            capacity : 1,
+            capacity : 0,
             location : "Lower Gym",
             fee : 50,
             time : "9:00am - 10:00am",
@@ -100,7 +100,7 @@ async function mockProgram(){
            },
            {
             name : "Personal Training Session 3",
-            capacity : 1,
+            capacity : 0,
             location : "Lower Gym",
             fee : 50,
             time : "3:00pm - 4:00pm",
@@ -113,11 +113,28 @@ async function mockProgram(){
     await Program.insertMany(programs);
 }
 
+async function mockUserPrograms(){
+    Program.find({}, (err, programs) =>{
+        User.find({staff : false}, (err, users) => {
+            let j = 0
+            users.forEach(user =>{
+                for(let i = j; i < (3 + j); i++){
+                    user.programs.push(programs[i]._id);
+                }
+                j += 3;
+                user.save();
+            })
+        });
+    })
+    
+}
+
 async function mockData(){
     await mongoose.connection.dropDatabase();
 
-    await mockUser();
     await mockProgram();
+    await mockUser();
+    await mockUserPrograms();
 }
 
 module.exports = mockData;

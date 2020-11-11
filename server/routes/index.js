@@ -34,7 +34,8 @@ router.post('/login', function(req, res, next) {
                         firstName : user.firstName,
                         lastName : user.lastName,
                         member : user.member,
-                        staff : user.staff
+                        staff : user.staff,
+                        programs : user.programs
                     };
   
                     res.json(userNoPassword);
@@ -113,6 +114,53 @@ router.delete('/program', function(req, res, next){
     else{
       res.json(result);
     }
+  });
+});
+
+// Gets the user programs
+router.get('/programs/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  User.findById(userid, (err1, user) =>{
+    if(err1){
+      res.status(500).send("Error in finding user");
+    }
+    else{
+      Program.find({_id : {$in: user.programs}}, (err2, programs) =>{
+        res.json(programs);
+      })
+    }
+  })
+})
+
+// Updates a program
+router.put('/program/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  Program.replaceOne({_id: userid}, req.body, (err, result) =>{
+    res.json(result);
+  })
+  
+});
+
+// Signs up user to program
+router.put('/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  let programid = req.body.programid;
+  Program.findByIdAndUpdate(
+    programid, 
+    { $inc: { capacity: -1}},
+    (err, program) =>{
+      User.findById(userid, (err2, user) =>{
+        user.programs.push(programid)
+        user.save();
+        res.json(user);
+      })
+    })
+});
+
+// Logout
+router.post('/logout', (req, res, next) => {
+  req.session.destroy((err) =>{
+    res.json("success");
   });
 });
 

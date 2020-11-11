@@ -4,6 +4,7 @@ export class User {
     username : String;
     member : Boolean;
     staff : Boolean;
+    programs : [];
 
     constructor(obj : any){
         this.username = obj.username;
@@ -11,5 +12,6 @@ export class User {
         this.lastName = obj.lastName;
         this.member = obj.member;
         this.staff = obj.staff;
+        this.programs = obj.progrmas;
     }
 }

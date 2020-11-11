@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   programs : Program[];
   programForm: FormGroup;
   programViewForm: FormGroup;
+  programId : string;
 
   debug: Boolean = false; //REMOVE THIS BEFORE SUBMIT
   
@@ -36,11 +37,10 @@ export class HomeComponent implements OnInit {
     this.isStaff = this.user.staff; 
     this.isMember = this.user.member;
 
-    this.api.getPrograms().subscribe(programs =>{
-      this.programs = programs;
-    });
+    this.updateView();
 
     this.programForm = new FormGroup({
+      _id: new FormControl(''),
       programName: new FormControl(''),
       location: new FormControl(''),
       description: new FormControl(''),
@@ -66,6 +66,18 @@ export class HomeComponent implements OnInit {
   signUp(): void{
     //const signUpBtn = document.getElementById('signUpBtn') as HTMLElement;
     //signUpBtn.setAttribute('disabled', 'true');
+
+    this.api.signUp(this.user['_id'], {programid : this.programId}).subscribe(result =>{
+      console.log(result);
+     });
+
+     this.updateView();
+  }
+
+  updateView(): void{
+    this.api.getPrograms().subscribe(programs =>{
+      this.programs = programs;
+    });
   }
 
   openProgamModal(data : Program): void {
@@ -77,6 +89,8 @@ export class HomeComponent implements OnInit {
       capacity: data.capacity,
       description: data.description,
      });
+
+     this.programId = data['_id'];
   }
 
   resetForm(formName: FormGroup): void {
@@ -84,6 +98,7 @@ export class HomeComponent implements OnInit {
   }
 
   openModifyModal(data : Program): void {
+    this.programId = data['_id'];
     this.isModding = true;
     //TODO Figure out date format
     this.programForm.patchValue({
@@ -161,10 +176,19 @@ export class HomeComponent implements OnInit {
       date : this.createDate(this.programForm.controls['dateStart'].value) + " - " + this.createDate(this.programForm.controls['dateEnd'].value)
     };
 
-    this.api.createProgram(body).subscribe(newProgram =>{
-      console.log(newProgram);
-    });
+    if(this.isModding){
+      this.api.modifyProgram(this.programId, body).subscribe(newProgram =>{
+        console.log(newProgram);
+      });
+    }
+    else{
+      this.api.createProgram(body).subscribe(newProgram =>{
+        console.log(newProgram);
+      });
+    }
 
-    window.location.reload(); //reload data
+    this.updateView();
+
+    // window.location.reload(); //reload data
   }
 }
