@@ -52,9 +52,11 @@ async function mockProgram(){
             capacity : 10,
             location : "YMCA pool",
             fee : 96,
-            time : "1:00pm - 1:30pm",
-            day : "Sunday",
-			date : "10/20/2020 - 11/20/2020",
+            startTime : "1:00pm",
+			endTime : "1:30pm",
+            day : ["Sun", "Mon"],
+			startDate : "10/20/2020",
+		    endDate : "11/20/2020",
             description : "Participants must pass beginner lessons."
            },
            {
@@ -62,9 +64,11 @@ async function mockProgram(){
             capacity : 4,
             location : "YMCA pool",
             fee : 110,
-            time : "2:00pm - 4:00pm",
-            day : "Monday",
-			date : "10/24/2020 - 11/20/2020",
+            startTime : "2:00pm",
+			endTime : "4:00pm",
+            day : ["Mon", "Wed", "Fri"],
+			startDate : "10/24/2020",
+			endDate :  "11/20/2020",
             description : "Log rolling is a sport in which two contestants stand on a floating log and try to knock each other off by spinning it with their feet. This is a competitive program with limited capacity."
            },
            {
@@ -72,9 +76,11 @@ async function mockProgram(){
             capacity : 20,
             location : "Upper Gym",
             fee : 65,
-            time : "6:00pm - 7:00pm",
-            day : "Friday",
-			date : "12/1/2020 - 12/24/2020",
+            startTime : "6:00pm",
+			endTime : "7:00pm",
+            day : ["Fri"],
+			startDate : "12/1/2020",
+			endDate :  "12/24/2020",
             description : "Learn the benefits of yoga. Participants must be 21 or order to join."
 
            },
@@ -83,9 +89,11 @@ async function mockProgram(){
             capacity : 1,
             location : "Lower Gym",
             fee : 50,
-            time : "9:00am - 10:00am",
-            day : "Tuesday",
-			date : "1/15/2021 - 2/1/2021",
+            startTime : "9:00am",
+			endTime: "10:00am",
+            day : ["Tues"],
+			startDate : "1/15/2021",
+			endDate: "2/1/2021",
             description : "1-1 Training sessions with an instructor."
            },
            {
@@ -93,9 +101,11 @@ async function mockProgram(){
             capacity : 1,
             location : "Lower Gym",
             fee : 50,
-            time : "9:00am - 10:00am",
-            day : "Thursday",
-			date : "1/15/2021 - 2/1/2021",
+            startTime : "9:00am",
+			endTime : "10:00am",
+            day : ["Tues, Thurs"],
+			startDate : "1/15/2021",
+			endDate: "2/1/2021",
             description : "1-1 Training sessions with an instructor."
            },
            {
@@ -103,9 +113,11 @@ async function mockProgram(){
             capacity : 1,
             location : "Lower Gym",
             fee : 50,
-            time : "3:00pm - 4:00pm",
-            day : "Tuesday",
-			date : "1/15/2021 - 2/1/2021",
+            startTime : "3:00pm",
+			endTime:  "4:00pm",
+            day : ["Tues"],
+			startDate : "1/15/2021",
+			endDate:  "2/1/2021",
             description : "1-1 Training sessions with an instructor."
            }
     ];

@@ -24,8 +24,8 @@
                         <td>{{program.name}}</td>
                         <td>{{program.location}}</td>
                         <td>{{program.day}}</td> 
-                        <td>{{program.time}}</td>
-                        <td>{{program.date}}</td>
+                        <td>{{program.startTime}} - {{program.endTime}}</td>
+                        <td>{{program.startDate}} - {{program.endDate}}</td>
                         <td> 
                           <div>
                             <button *ngIf="!isStaff || debug" id="{{program._id}}" class="btn btn-primary" (click)="openProgamModal(program)" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
@@ -143,30 +143,32 @@
                      </div>
                     <div class="form-row">
                       <div class="form-group col-md-12">
-                        <div class="weekDays-selector">
-                          <input type="checkbox" id="monday" formControlName="monday" value="Monday"/>
+                        <div>
                           <label for="monday">Mon</label>
-                          <input type="checkbox" id="tuesday"formControlName="tuesday" value="Tuesday"/>
                           <label for="tuesday">Tues</label>
-                          <input type="checkbox" id="wednesday" formControlName="wednesday"/>
                           <label for="wednesday">Wed</label>
-                          <input type="checkbox" id="thursday" formControlName="thursday"/>
                           <label for="thursday">Thur</label>
-                          <input type="checkbox" id="friday" formControlName="friday"/>
                           <label for="friday">Fri</label>
-                          <input type="checkbox" id="saturday" formControlName="saturday"/>
                           <label for="saturday">Sat</label>
-                          <input type="checkbox" id="sunday" formControlName="sunday"/>
                           <label for="sunday">Sun</label>
+                        </div>
+                        <div class="weekDays-selector">
+                          <input type="checkbox" id="monday" class="weekday" formControlName="monday" value="Monday"/>
+                          <input type="checkbox" id="tuesday" class="weekday"formControlName="tuesday" value="Tuesday"/>
+                          <input type="checkbox" id="wednesday" class="weekday" formControlName="wednesday"/>
+                          <input type="checkbox" id="thursday" class="weekday" formControlName="thursday"/>
+                          <input type="checkbox" id="friday" class="weekday" formControlName="friday"/>
+                          <input type="checkbox" id="saturday" class="weekday" formControlName="saturday"/>
+                          <input type="checkbox" id="sunday" class="weekday" formControlName="sunday"/>
                         </div>
                       </div>
                     </div>
                     <div class="form-row">
-                      <div class="form-group col-md-4">
+                      <div class="form-group col-md-6">
                         <label for="timeStart">Time Start</label>
                         <input type="time" class="form-control" formControlName="timeStart" placeholder="12:00am" id="timeStart">
                       </div>
-                      <div class="form-group col-md-4">
+                      <div class="form-group col-md-6">
                         <label for="timeEnd">Time End</label>
                         <input type="time" class="form-control" formControlName="timeEnd" id="timeEnd">
                       </div>

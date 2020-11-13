@@ -117,10 +117,10 @@ export class HomeComponent implements OnInit {
       description: data.description,
       fee: data.fee,
       capacity: data.capacity,
-      timeStart: data.time.substring(0,data.time.indexOf('-')),
-      timeEnd: data.time.substring(data.time.indexOf('-')+2),
-      dateStart: data.date.substring(0,data.date.indexOf('-')),
-      dateEnd: data.date.substring(data.date.indexOf('-')+2)
+      timeStart: data.startTime,
+      timeEnd: data.endTime,
+      dateStart: data.startDate,
+      dateEnd: data.endDate,
     });
  }
 
@@ -175,13 +175,13 @@ export class HomeComponent implements OnInit {
 
     let days = [];
 
-    const mon = this.programForm.controls['monday'].value ? "Monday" : null;
-    const tues = this.programForm.controls['tuesday'].value ? "Tuesday" : null;
-    const wed = this.programForm.controls['wednesday'].value ? "Wednesday" : null;
-    const thur = this.programForm.controls['thursday'].value ? "Thursday" : null;
-    const fri = this.programForm.controls['friday'].value ? "Friday" : null;
-    const sat = this.programForm.controls['saturday'].value ? "Saturday" : null;
-    const sun = this.programForm.controls['sunday'].value ? "Sunday" : null;
+    const mon = this.programForm.controls['monday'].value ? "Mon" : null;
+    const tues = this.programForm.controls['tuesday'].value ? "Tues" : null;
+    const wed = this.programForm.controls['wednesday'].value ? "Wed" : null;
+    const thur = this.programForm.controls['thursday'].value ? "Thurs" : null;
+    const fri = this.programForm.controls['friday'].value ? "Fri" : null;
+    const sat = this.programForm.controls['saturday'].value ? "Sat" : null;
+    const sun = this.programForm.controls['sunday'].value ? "Sun" : null;
 
     if (mon) days.push(mon);
     if (tues) days.push(tues);
@@ -198,20 +198,18 @@ export class HomeComponent implements OnInit {
       description : this.programForm.controls['description'].value,
       fee : this.programForm.controls['fee'].value,
       capacity : this.programForm.controls['capacity'].value,
-      time : this.createTime(this.programForm.controls['timeStart'].value)  + " - " + this.createTime(this.programForm.controls['timeEnd'].value),
+      startTime : this.createTime(this.programForm.controls['timeStart'].value),
+      endTime: this.createTime(this.programForm.controls['timeEnd'].value),
+      startDate : this.createDate(this.programForm.controls['dateStart'].value),
+      endDate : this.createDate(this.programForm.controls['dateEnd'].value),
       day : days,
-      date : this.createDate(this.programForm.controls['dateStart'].value) + " - " + this.createDate(this.programForm.controls['dateEnd'].value)
     };
 
     if(this.isModding){
-      this.api.modifyProgram(this.programId, body).subscribe(newProgram =>{
-        console.log(newProgram);
-      });
+      this.api.modifyProgram(this.programId, body).subscribe();
     }
     else{
-      this.api.createProgram(body).subscribe(newProgram =>{
-        console.log(newProgram);
-      });
+      this.api.createProgram(body).subscribe();
     }
 
     this.updateView();
