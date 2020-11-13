@@ -20,9 +20,7 @@ export class UserHomeComponent implements OnInit {
     private data : DataService) { }
 
   ngOnInit(): void {
-    this.data.currentUser.subscribe(user =>{
-      this.user = <User>user;
-    });
+    this.user = JSON.parse(localStorage.getItem('user-login'));
 
     this.api.getUserPrograms(this.user['_id']).subscribe(programs =>{
       this.programs = programs;

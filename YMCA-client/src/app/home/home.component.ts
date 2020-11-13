@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
 import { User } from '../user';
 import { Program } from '../program';
 import { FormControl, FormGroup} from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
-import { faSun } from '@fortawesome/free-regular-svg-icons';
+
 
 @Component({
   selector: 'app-home',
@@ -22,8 +21,7 @@ export class HomeComponent implements OnInit {
   programForm: FormGroup;
   programViewForm: FormGroup;
   programId : string;
-
-  debug: Boolean = false; //REMOVE THIS BEFORE SUBMIT
+  signedUp: Program[];
   
   constructor( 
     private router : Router,
@@ -36,6 +34,10 @@ export class HomeComponent implements OnInit {
     if (!this.user){
       this.router.navigate(['/']);
     }
+
+    this.api.getUserPrograms(this.user['_id']).subscribe(programs =>{
+      this.signedUp = programs;
+    });
 
 
     this.isStaff = this.user.staff; 
@@ -74,20 +76,28 @@ export class HomeComponent implements OnInit {
   
 
   signUp(): void{
-    //const signUpBtn = document.getElementById('signUpBtn') as HTMLElement;
-    //signUpBtn.setAttribute('disabled', 'true');
 
-    this.api.signUp(this.user['_id'], {programid : this.programId}).subscribe(result =>{
-      console.log(result);
-     });
+    this.api.signUp(this.user['_id'], {programid : this.programId}).subscribe();
 
-     this.updateView();
+     alert("You are now signed up");
+     location.reload();
+     //this.updateView();
   }
 
   updateView(): void{
     this.api.getPrograms().subscribe(programs =>{
       this.programs = programs;
     });
+  }
+
+  isSignedUp(program: Program) : boolean {
+    let ret = false;
+    this.signedUp.forEach(elem => {
+      if (elem["_id"] == program["_id"]) {
+        ret = true;
+      }
+     });
+    return ret;
   }
 
   openProgamModal(data : Program): void {
@@ -213,7 +223,5 @@ export class HomeComponent implements OnInit {
     }
 
     this.updateView();
-
-    // window.location.reload(); //reload data
   }
 }
