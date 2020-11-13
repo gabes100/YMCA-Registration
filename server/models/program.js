@@ -6,9 +6,11 @@ let programSchema = new mongoose.Schema(
         location : String,
         fee : Number,
         time : String,
-        day : String,
-	     date : String,
-        description : String
+        description : String,
+		date : String,
+	    day: [{
+			type: String
+		}]
    }
 )
 

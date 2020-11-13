@@ -142,19 +142,26 @@
                        </div>
                      </div>
                     <div class="form-row">
-                      <div class="form-group col-md-4">
-                        <label for="day">Day of Week</label>
-                        <select id="day" class="form-control" formControlName="day">
-                          <option selected>Choose Day.</option>
-                          <option>Sunday</option>
-                          <option>Monday</option>
-                          <option>Tuesday</option>
-                          <option>Wednesday</option>
-                          <option>Thursday</option>
-                          <option>Friday</option>
-                          <option>Saturday</option>
-                        </select>
+                      <div class="form-group col-md-12">
+                        <div class="weekDays-selector">
+                          <input type="checkbox" id="monday" formControlName="monday" value="Monday"/>
+                          <label for="monday">Mon</label>
+                          <input type="checkbox" id="tuesday"formControlName="tuesday" value="Tuesday"/>
+                          <label for="tuesday">Tues</label>
+                          <input type="checkbox" id="wednesday" formControlName="wednesday"/>
+                          <label for="wednesday">Wed</label>
+                          <input type="checkbox" id="thursday" formControlName="thursday"/>
+                          <label for="thursday">Thur</label>
+                          <input type="checkbox" id="friday" formControlName="friday"/>
+                          <label for="friday">Fri</label>
+                          <input type="checkbox" id="saturday" formControlName="saturday"/>
+                          <label for="saturday">Sat</label>
+                          <input type="checkbox" id="sunday" formControlName="sunday"/>
+                          <label for="sunday">Sun</label>
+                        </div>
                       </div>
+                    </div>
+                    <div class="form-row">
                       <div class="form-group col-md-4">
                         <label for="timeStart">Time Start</label>
                         <input type="time" class="form-control" formControlName="timeStart" placeholder="12:00am" id="timeStart">

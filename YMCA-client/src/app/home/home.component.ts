@@ -6,6 +6,7 @@ import { User } from '../user';
 import { Program } from '../program';
 import { FormControl, FormGroup} from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { faSun } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-home',
@@ -49,7 +50,13 @@ export class HomeComponent implements OnInit {
       description: new FormControl(''),
       fee: new FormControl(''),
       capacity: new FormControl(''),
-      day: new FormControl(''),
+      monday: new FormControl(''),
+      tuesday: new FormControl(''),
+      wednesday: new FormControl(''),
+      thursday: new FormControl(''),
+      friday: new FormControl(''),
+      saturday: new FormControl(''),
+      sunday: new FormControl(''),
       timeStart: new FormControl(''),
       timeEnd: new FormControl(''),
       dateStart: new FormControl(''),
@@ -108,7 +115,6 @@ export class HomeComponent implements OnInit {
       programName: data.name,
       location: data.location,
       description: data.description,
-      day: data.day,
       fee: data.fee,
       capacity: data.capacity,
       timeStart: data.time.substring(0,data.time.indexOf('-')),
@@ -167,7 +173,25 @@ export class HomeComponent implements OnInit {
 
   updateProgram() : void {
 
-    console.log(this.programForm.controls['dateStart'].value);
+    let days = [];
+
+    const mon = this.programForm.controls['monday'].value ? "Monday" : null;
+    const tues = this.programForm.controls['tuesday'].value ? "Tuesday" : null;
+    const wed = this.programForm.controls['wednesday'].value ? "Wednesday" : null;
+    const thur = this.programForm.controls['thursday'].value ? "Thursday" : null;
+    const fri = this.programForm.controls['friday'].value ? "Friday" : null;
+    const sat = this.programForm.controls['saturday'].value ? "Saturday" : null;
+    const sun = this.programForm.controls['sunday'].value ? "Sunday" : null;
+
+    if (mon) days.push(mon);
+    if (tues) days.push(tues);
+    if (wed) days.push(wed);
+    if (thur) days.push(thur);
+    if (fri) days.push(fri);
+    if (sat) days.push(sat);
+    if (sun) days.push(sun);
+  
+
     let body = {
       name : this.programForm.controls['programName'].value,
       location : this.programForm.controls['location'].value,
@@ -175,7 +199,7 @@ export class HomeComponent implements OnInit {
       fee : this.programForm.controls['fee'].value,
       capacity : this.programForm.controls['capacity'].value,
       time : this.createTime(this.programForm.controls['timeStart'].value)  + " - " + this.createTime(this.programForm.controls['timeEnd'].value),
-      day : this.programForm.controls['day'].value,
+      day : days,
       date : this.createDate(this.programForm.controls['dateStart'].value) + " - " + this.createDate(this.programForm.controls['dateEnd'].value)
     };
 
