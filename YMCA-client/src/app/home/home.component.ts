@@ -77,7 +77,9 @@ export class HomeComponent implements OnInit {
 
   signUp(): void{
 
-    this.api.signUp(this.user['_id'], {programid : this.programId}).subscribe();
+    this.api.signUp(this.user['_id'], {programid : this.programId}).subscribe(
+      
+    );
 
      alert("You are now signed up");
      location.reload();

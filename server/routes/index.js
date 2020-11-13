@@ -9,9 +9,10 @@ const moment = MomentRange.extendMoment(Moment);
 let User = require('../models/user');
 let Program = require('../models/program');
 
+const zeroPad = (num, places) => String(num).padStart(places, '0')
+
 
 let formatDate = function(date, time){
-  const zeroPad = (num, places) => String(num).padStart(places, '0')
 
   let dateSplit = date.split('/');
   let hours = time.slice(0, -2);
@@ -20,6 +21,45 @@ let formatDate = function(date, time){
   return validDate;
 
 }
+
+let isOverLap = function(prog, newProg){
+  let progStart = formatDate(prog.startDate, prog.startTime);
+  let progEnd = formatDate(prog.endDate, prog.endTime);
+  let newStart = formatDate(newProg.startDate, newProg.startTime);
+  let newEnd = formatDate(newProg.endDate, newProg.endTime);
+
+  var date1 = [moment(progStart), moment(progEnd)];
+  var date2 = [moment(newStart), moment(newEnd)];
+  
+  var progRange  = moment.range(date1);
+  var newProgRange = moment.range(date2);
+
+  if(progRange.overlaps(newProgRange)) {
+    let times1 = [zeroPad(progStart.getHours(), 2) + ':' + zeroPad(progStart.getMinutes(), 2), zeroPad(progEnd.getHours(), 2) + ':' + zeroPad(progEnd.getMinutes(), 2)]
+    let times2 = [zeroPad(newStart.getHours(), 2) + ':' + zeroPad(newStart.getMinutes(), 2), zeroPad(newEnd.getHours(), 2) + ':' + zeroPad(newEnd.getMinutes(), 2)]
+    let timeSegments = [times1, times2];
+    if(timeOverLap(timeSegments)){
+      return true;
+    }
+  }
+  return false;
+}
+
+let timeOverLap = (timeSegments) => {
+  let ret = false;
+  let i = 0;
+  while( !ret && i<timeSegments.length-1 ){
+    let seg1 = timeSegments[i];
+    let seg2 = timeSegments[i+1];
+    let range1 = moment.range( moment(seg1[0], 'HH:mm'),  moment(seg1[1], 'HH:mm'));
+    let range2 = moment.range( moment(seg2[0], 'HH:mm'),  moment(seg2[1], 'HH:mm'));
+    if( range1.overlaps(range2) ){
+      ret = true;
+    }
+    i++;
+  }
+  return ret;
+};
 
 // #################################### API ###################################################################################################################
 
@@ -159,54 +199,48 @@ router.put('/program/:userid', function(req, res, next){
 });
 
 // Signs up user to program
-router.put('/:userid', function(req, res, next){
+router.put('/:userid', [
+  function(req, res, next){
+    // let userid = req.params.userid;
+    // let programid = req.body.programid;
+    // let good = true;
+
+    // Program.findById(programid, (err1, newProg)=>{
+    //   User.findById(userid, (err2, user) =>{
+    //     user.programs.forEach(progId =>{
+    //       Program.findById(progId, (err3, prog)=>{
+    //         if(isOverLap(prog, newProg)){
+    //           res.status(400).json('Error: Time Conflict!')
+    //           req.end();
+    //         }
+    //       })
+    //     })
+    //   })
+    // })
+  next();
+  }, 
+  function(req, res, next){
   let userid = req.params.userid;
   let programid = req.body.programid;
 
-  Program.findById(programid, (err1, newProg)=>{
-    User.findById(userid, (err2, user) =>{
-      user.programs.forEach(progId =>{
-        Program.findById(progId, (err3, prog)=>{
-          let progStart = formatDate(prog.startDate, prog.startTime);
-          let progEnd = formatDate(prog.endDate, prog.endTime);
-          let newStart = formatDate(newProg.startDate, newProg.startTime);
-          let newEnd = formatDate(newProg.endDate, newProg.endTime);
-
-          var date1 = [moment(progStart), moment(progEnd)];
-          var date2 = [moment(newStart), moment(newEnd)];
-
-          console.log(date1[0].toString());
-          console.log(date1[1].toString());
-          
-          var progRange  = moment.range(date1);
-          var newProgRange = moment.range(date2);
-
-          if(progRange.overlaps(newProgRange)) {
-            if((newProgRange.contains(progRange, true) || progRange.contains(newProgRange, true)) && !date1[0].isSame(date2[0]))
-              console.log("time range 1 is completely conflict with time range 2 and vice versa");
-            else
-              console.log("time range 1 is partially conflict with time range 2 and vice versa");
-          }
-          
+  //if(good){
+    Program.findByIdAndUpdate(
+      programid, 
+      { $inc: { capacity: -1}},
+      (err, program) =>{
+        User.findById(userid, (err2, user) =>{
+          user.programs.push(programid)
+          user.save();
+          res.json(user);
         })
       })
-    })
-  })
+  // }
+  // else{
+  //   console.log("CHECH------------------------------")
+  //   res.status(400).json('Error: Time Conflict!')
+  // }
   
-
-
-
-  Program.findByIdAndUpdate(
-    programid, 
-    { $inc: { capacity: -1}},
-    (err, program) =>{
-      User.findById(userid, (err2, user) =>{
-        user.programs.push(programid)
-        user.save();
-        res.json(user);
-      })
-    })
-});
+}]);
 
 // Logout
 router.post('/logout', (req, res, next) => {
