@@ -2,9 +2,26 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 
+const Moment = require('moment');
+const MomentRange = require('moment-range');
+const moment = MomentRange.extendMoment(Moment);
+
 let User = require('../models/user');
 let Program = require('../models/program');
 
+
+let formatDate = function(date, time){
+  const zeroPad = (num, places) => String(num).padStart(places, '0')
+
+  let dateSplit = date.split('/');
+  let hours = time.slice(0, -2);
+  let end = time.slice(-2, time.length);
+  let validDate = new Date(dateSplit[2] + '-' + zeroPad((dateSplit[0]), 2) + '-' + zeroPad(dateSplit[1], 2) + ' ' + hours + ' ' + end.toUpperCase());
+  return validDate;
+
+}
+
+// #################################### API ###################################################################################################################
 
 // Login
 router.post('/login', function(req, res, next) {
@@ -145,6 +162,40 @@ router.put('/program/:userid', function(req, res, next){
 router.put('/:userid', function(req, res, next){
   let userid = req.params.userid;
   let programid = req.body.programid;
+
+  Program.findById(programid, (err1, newProg)=>{
+    User.findById(userid, (err2, user) =>{
+      user.programs.forEach(progId =>{
+        Program.findById(progId, (err3, prog)=>{
+          let progStart = formatDate(prog.startDate, prog.startTime);
+          let progEnd = formatDate(prog.endDate, prog.endTime);
+          let newStart = formatDate(newProg.startDate, newProg.startTime);
+          let newEnd = formatDate(newProg.endDate, newProg.endTime);
+
+          var date1 = [moment(progStart), moment(progEnd)];
+          var date2 = [moment(newStart), moment(newEnd)];
+
+          console.log(date1[0].toString());
+          console.log(date1[1].toString());
+          
+          var progRange  = moment.range(date1);
+          var newProgRange = moment.range(date2);
+
+          if(progRange.overlaps(newProgRange)) {
+            if((newProgRange.contains(progRange, true) || progRange.contains(newProgRange, true)) && !date1[0].isSame(date2[0]))
+              console.log("time range 1 is completely conflict with time range 2 and vice versa");
+            else
+              console.log("time range 1 is partially conflict with time range 2 and vice versa");
+          }
+          
+        })
+      })
+    })
+  })
+  
+
+
+
   Program.findByIdAndUpdate(
     programid, 
     { $inc: { capacity: -1}},
