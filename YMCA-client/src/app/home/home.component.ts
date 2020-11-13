@@ -30,9 +30,12 @@ export class HomeComponent implements OnInit {
     private data : DataService) { }
 
   ngOnInit(): void {
-    this.data.currentUser.subscribe(user =>{
-      this.user = <User>user;
-    });
+    this.user = JSON.parse(localStorage.getItem('user-login'));
+  
+    if (!this.user){
+      this.router.navigate(['/']);
+    }
+
 
     this.isStaff = this.user.staff; 
     this.isMember = this.user.member;

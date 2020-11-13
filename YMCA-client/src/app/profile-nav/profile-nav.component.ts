@@ -25,6 +25,7 @@ export class ProfileNavComponent implements OnInit {
         console.log(result);
       }
     })
+    localStorage.removeItem('user-login');
     this.router.navigate(['/login']);
   }
 

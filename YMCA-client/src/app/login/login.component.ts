@@ -19,6 +19,12 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user-login'));
+
+    // go home if logged in
+    if (user){
+      this.router.navigate(['/home']);
+    }
   }
 
   attemptLogin(){
