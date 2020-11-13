@@ -19,6 +19,9 @@ label {
     margin-right: 25px;
 }
 
+input[type="text"][disabled] {
+    color: white;
+ }
 
 
 
