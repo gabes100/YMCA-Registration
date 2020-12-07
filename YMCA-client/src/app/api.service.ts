@@ -28,10 +28,26 @@ export class ApiService {
     return this.http.post<Program>('/api/program', body);
   }
 
+  modifyProgram(id, body) : Observable<Program>{
+    return this.http.put<Program>('/api/program/' + id, body);
+  }
+
   deleteProgram(id) : Observable<Object>{
     let params = new HttpParams();
     params = params.append('program', id);
     
     return this.http.delete<Object>('/api/program', {params : params});
+  }
+
+  getUserPrograms(id) : Observable<Program[]>{
+    return this.http.get<Program[]>('/api/programs/' + id);
+  }
+
+  signUp(userid, body) : Observable<User>{
+    return this.http.put<User>('/api/' + userid, body);
+  }
+
+  logout() : Observable<String>{
+    return this.http.post<String>('/api/logout', {});
   }
 }

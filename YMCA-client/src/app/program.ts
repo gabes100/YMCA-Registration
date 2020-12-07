@@ -3,20 +3,23 @@ export class Program {
     location : String;
     description : String;
     capacity : Number;
-    time : String;
-    day : String
-    date : String;
     fee : Number;
-    
-
+    startTime: String;
+    endTime: String;
+    startDate: String;
+    endDate: String;
+    day : String[];
+  
     constructor(obj : any){
         this.name = obj.name;
         this.location = obj.location;
         this.description = obj.description;
-        this.time = obj.time;
+        this.startTime = obj.startTime;
+        this.endTime = obj.endTime;
+        this.startDate = obj.startDate;
+        this.endDate = obj.endDate;
         this.day = obj.day;
         this.capacity = obj.capacity;
-        this.date = obj.date;
         this.fee = obj.fee;
     }
 }

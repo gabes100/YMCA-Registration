@@ -32,13 +32,32 @@ async function mockUser(){
             staff : false
         },
         {
-            username : "sally.smith",
-            password : bcrypt.hashSync("123456789", 10),
-            firstName : "Sally",
-            lastName : "Smith",
+            username : "anderson.luke",
+            password : bcrypt.hashSync("password", 10),
+            firstName : "Luke",
+            lastName : "Anderson",
             member : false,
             staff : false
+        },
+		{
+            username : "anderson.aini",
+            password : bcrypt.hashSync("password", 10),
+            firstName : "Aini",
+            lastName : "Anderson",
+            member : true,
+            staff : false
+        },
+		{
+            username : "doe.jane",
+            password : bcrypt.hashSync("password", 10),
+            firstName : "Jane",
+            lastName : "Doe",
+            member : true,
+            staff : false
         }
+
+
+
 
     ];
 
@@ -48,23 +67,51 @@ async function mockUser(){
 async function mockProgram(){
     let programs = [
            {
-            name : "Advanced Swimming Lessons",
-            capacity : 10,
-            location : "YMCA pool",
+            name : "Shark",
+            capacity : 7,
+            location : "YMCA Onalaska pool",
             fee : 96,
-            time : "1:00pm - 1:30pm",
-            day : "Sunday",
-			date : "10/20/2020 - 11/20/2020",
-            description : "Participants must pass beginner lessons."
+            startTime : "5:00pm",
+			endTime : "5:40pm",
+            day : ["Sun"],
+			startDate : "12/14/2020",
+		    endDate : "01/10/2021",
+            description : "Participants must have passed pike level before."
+           },
+		   {
+            name : "Shark",
+            capacity : 7,
+            location : "YMCA Onalaska pool",
+            fee : 130,
+            startTime : "6:00pm",
+			endTime : "6:40pm",
+            day : ["Mon", "Wed"],
+			startDate : "12/14/2020",
+		    endDate : "01/10/2021",
+            description : "Participants must have passed pike level before."
            },
            {
             name : "Log Rolling",
-            capacity : 4,
-            location : "YMCA pool",
-            fee : 110,
-            time : "2:00pm - 4:00pm",
-            day : "Monday",
-			date : "10/24/2020 - 11/20/2020",
+            capacity : 0,
+            location : "YMCA Onalaska pool",
+            fee : 200,
+            startTime : "5:00pm",
+			endTime : "5:40pm",
+            day : ["Sun"],
+			startDate : "12/14/2020",
+			endDate :  "01/10/2021",
+            description : "Log rolling is a sport in which two contestants stand on a floating log and try to knock each other off by spinning it with their feet. This is a competitive program with limited capacity."
+           },
+		   {
+            name : "Log Rolling",
+            capacity : 0,
+            location : "YMCA Onalaska pool",
+            fee : 200,
+            startTime : "6:00pm",
+			endTime : "6:40pm",
+            day : ["Mon"],
+			startDate : "12/14/2020",
+			endDate :  "01/10/2021",
             description : "Log rolling is a sport in which two contestants stand on a floating log and try to knock each other off by spinning it with their feet. This is a competitive program with limited capacity."
            },
            {
@@ -72,20 +119,23 @@ async function mockProgram(){
             capacity : 20,
             location : "Upper Gym",
             fee : 65,
-            time : "6:00pm - 7:00pm",
-            day : "Friday",
-			date : "12/1/2020 - 12/24/2020",
+            startTime : "6:00pm",
+			endTime : "7:00pm",
+            day : ["Fri"],
+			startDate : "12/01/2020",
+			endDate :  "12/24/2020",
             description : "Learn the benefits of yoga. Participants must be 21 or order to join."
-
            },
            {
             name : "Personal Training Session 1",
             capacity : 1,
             location : "Lower Gym",
             fee : 50,
-            time : "9:00am - 10:00am",
-            day : "Tuesday",
-			date : "1/15/2021 - 2/1/2021",
+            startTime : "9:00am",
+			endTime: "10:00am",
+            day : ["Tues"],
+			startDate : "01/15/2021",
+			endDate: "02/01/2021",
             description : "1-1 Training sessions with an instructor."
            },
            {
@@ -93,9 +143,11 @@ async function mockProgram(){
             capacity : 1,
             location : "Lower Gym",
             fee : 50,
-            time : "9:00am - 10:00am",
-            day : "Thursday",
-			date : "1/15/2021 - 2/1/2021",
+            startTime : "9:00am",
+			endTime : "10:00am",
+            day : ["Tues, Thurs"],
+			startDate : "01/15/2021",
+			endDate: "02/01/2021",
             description : "1-1 Training sessions with an instructor."
            },
            {
@@ -103,9 +155,11 @@ async function mockProgram(){
             capacity : 1,
             location : "Lower Gym",
             fee : 50,
-            time : "3:00pm - 4:00pm",
-            day : "Tuesday",
-			date : "1/15/2021 - 2/1/2021",
+            startTime : "3:00pm",
+			endTime:  "4:00pm",
+            day : ["Tues"],
+			startDate : "01/15/2021",
+			endDate:  "02/01/2021",
             description : "1-1 Training sessions with an instructor."
            }
     ];
@@ -113,11 +167,54 @@ async function mockProgram(){
     await Program.insertMany(programs);
 }
 
+async function mockUserPrograms(){
+    Program.find({name: "Shark", startTime: "6:00pm"}, (err, programs) =>{
+        User.find({username: "doe.jane"}, (err, users) => {
+            users.forEach(user =>{
+                user.programs.push(programs[0]._id);
+                user.save();
+            })
+        });
+    })
+
+	Program.find({name: "Shark", startTime: "6:00pm"}, (err, programs) =>{
+        User.find({username: "anderson.luke"}, (err, users) => {
+            users.forEach(user =>{
+                user.programs.push(programs[0]._id);
+                user.save();
+            })
+        });
+    })
+
+	Program.find({name: "Log Rolling", startTime: "5:00pm"}, (err, programs) =>{
+        User.find({username: "anderson.luke"}, (err, users) => {
+            users.forEach(user =>{
+                user.programs.push(programs[0]._id);
+                user.save();
+            })
+        });
+    })
+
+
+	Program.find({name: "Log Rolling", startTime: "6:00pm"}, (err, programs) =>{
+        User.find({username: "anderson.aini"}, (err, users) => {
+            users.forEach(user =>{
+                user.programs.push(programs[0]._id);
+                user.save();
+            })
+        });
+    })
+
+
+
+}
+
 async function mockData(){
     await mongoose.connection.dropDatabase();
 
-    await mockUser();
     await mockProgram();
+    await mockUser();
+    await mockUserPrograms();
 }
 
 module.exports = mockData;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 import { DataService } from '../data.service';
 
 @Component({
@@ -9,7 +10,9 @@ import { DataService } from '../data.service';
 })
 export class ProfileNavComponent implements OnInit {
 
-  constructor(private router : Router,
+  constructor(
+    private router : Router,
+    private api : ApiService,
     private data : DataService) { }
 
   ngOnInit(): void {
@@ -17,6 +20,12 @@ export class ProfileNavComponent implements OnInit {
 
   logout(){
     this.data.changeUser(Object);
+    this.api.logout().subscribe(result =>{
+      if(result){
+        console.log(result);
+      }
+    })
+    localStorage.removeItem('user-login');
     this.router.navigate(['/login']);
   }
 

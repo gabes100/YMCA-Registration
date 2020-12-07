@@ -12,6 +12,7 @@ export class DataService {
 
   changeUser(user : Object){
     this.userSource.next(user);
+    localStorage.setItem('user-login', JSON.stringify(user));
   }
 
 }
