@@ -1,21 +1,22 @@
 <div class="container container-top">
     <div class="card main">
         <div class="card-header">
-            <h2 style="text-align: center;">YMCA Program Listings</h2>
+            <h3 style="text-align: center;"><strong>Program Listings</strong></h3>
             <button *ngIf="isStaff " id="createNewBtn" class="btn btn-success float-right" data-toggle="modal" (click)="openCreateModal()" data-target="#programCreate">Create New Program</button>
             <button *ngIf="!isStaff" class="btn btn-success float-right" [routerLink]="['/myprograms']">My Programs</button>
         </div>
         <div class="card-body menu">
             <div class="container">
+              <div class="main-table">
                 <table class="table table-hover">
                   <thead>
-                    <tr class="table-header">
+                    <tr class="thead-light">
                       <th>Program Name</th>
                       <th>Location</th>
                       <th>Day</th>
                       <th>Time</th>
                       <th>Date</th>
-                      <th>Actions</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -31,13 +32,14 @@
                             <button *ngIf="!isStaff && !isSignedUp(program)" id="{{program._id}}" class="btn btn-primary" (click)="openProgamModal(program)" data-toggle="modal" data-target="#programSignUp">Sign Up</button>
                             <button *ngIf="!isStaff && isSignedUp(program)" disabled class="btn btn-primary">Sign Up</button>
                             <button *ngIf="isStaff" class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(program)" data-target="#programCreate"><i class="fa fa-cog"></i></button>
-                            <button *ngIf="isStaff" class="btn btn-danger" data-toggle="modal" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
+                            <button *ngIf="isStaff" class="btn btn-danger" data-toggle="modal" (click)="openRemoveModal(program)" data-target="#removeProgram"><i class="fa fa-trash"></i></button>
                           </div>
                          </td>
                       </ng-container>
                     </tr>
                   </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
@@ -68,12 +70,10 @@
                     <input [disabled]="true" style="border: none" class="form-control" id="capacity" formControlName="capacity">
                   </div>
                 </div>
-                <div class="form-row">
-                    <div class="col">
-                        <button type="button" class="btn btn-primary float-right" data-dismiss="modal" (click)="signUp()">Confirm</button>
-                    </div>
-                </div>
               </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary float-right" data-dismiss="modal" (click)="signUp()">Confirm</button>
             </div>
         </div>
     </div>
@@ -90,14 +90,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col">
-                      <span>Are you sure you want to remove this program?<br><br></span>
+                      <span>Are you sure you want to remove this program?</span>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <button type="button" class="btn btn-primary float-right" (click)="removeProgram()">Confirm</button>
-                    </div>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary float-right" data-dismiss="modal" (click)="removeProgram(programId)">Confirm</button>
             </div>
         </div>
     </div>
@@ -166,7 +164,7 @@
                     <div class="form-row">
                       <div class="form-group col-md-6">
                         <label for="timeStart">Time Start</label>
-                        <input type="time" class="form-control" formControlName="timeStart" placeholder="12:00am" id="timeStart">
+                        <input type="time" class="form-control" formControlName="timeStart" id="timeStart">
                       </div>
                       <div class="form-group col-md-6">
                         <label for="timeEnd">Time End</label>
@@ -183,9 +181,11 @@
                         <input type="date" class="form-control" formControlName="dateEnd" id="dateEnd">
                       </div>
                     </div>
-                    <button *ngIf="isModding === false" type="submit" data-dismiss="modal" (click) = "updateProgram()" class="btn btn-primary float-right">Create</button>
-                    <button *ngIf="isModding === true" type="submit" data-dismiss="modal" class="btn btn-primary float-right" (click) = "updateProgram()">Save</button>
-                </form>
+                  </form>
+              </div>  
+              <div class="modal-footer">
+                  <button *ngIf="isModding === false" type="submit" data-dismiss="modal" (click) = "updateOrCreateProgram" class="btn btn-primary float-right">Create</button>
+                  <button *ngIf="isModding === true" type="submit" data-dismiss="modal" class="btn btn-primary float-right" (click) = "updateProgram()">Save</button>   
             </div>
         </div>
     </div>

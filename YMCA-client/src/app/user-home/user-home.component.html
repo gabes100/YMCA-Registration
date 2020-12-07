@@ -1,12 +1,13 @@
 <div class="container container-top">
     <div class="card main">
         <div class="card-header">
-            <h2 style="text-align: center;">My Programs</h2>
+            <h3 style="text-align: center;"><strong>Programs</strong></h3>
             <button class="btn btn-primary pull-right" [routerLink]="['/home']">More Programs</button>
         </div>
         <div class="card-body menu">
             <div class="container">
-                <table class="table table-hover">
+                <div class="main-table">
+                    <table class="table table-hover">
                     <thead class="thead-light">
                         <tr>
                             <th>Program Name</th>
@@ -14,6 +15,7 @@
                             <th>Day</th>
                             <th>Time</th>
                             <th>Date</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,9 +25,11 @@
                             <td>{{program.day}}</td> 
                             <td>{{program.startTime}} - {{program.endTime}}</td>
                             <td>{{program.startDate}} - {{program.endDate}}</td>
+                            <td><button class="btn btn-danger">Cancel</button></td>
                         </tr>
                     </tbody>
-                </table>
+                 </table>
+                </div>
             </div>
         </div>
     </div>
