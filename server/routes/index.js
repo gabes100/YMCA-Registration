@@ -30,7 +30,7 @@ let isOverLap = function(prog, newProg){
 
   var date1 = [moment(progStart), moment(progEnd)];
   var date2 = [moment(newStart), moment(newEnd)];
-  
+
   var progRange  = moment.range(date1);
   var newProgRange = moment.range(date2);
 
@@ -94,7 +94,7 @@ router.post('/login', function(req, res, next) {
                         staff : user.staff,
                         programs : user.programs
                     };
-  
+
                     res.json(userNoPassword);
                   }
                 });
@@ -155,6 +155,18 @@ router.get('/programs', function(req, res, next){
   });
 });
 
+// Gets the users
+router.get('/users', function(req, res, next){
+  User.find({}, (err, users) => {
+    if(err){
+      res.status(500).send("Error in users");
+    }
+    else{
+      res.json(users)
+    }
+  });
+});
+
 // Creates a new program
 router.post('/program', function(req, res, next){
   let program = new Program(req.body);
@@ -195,7 +207,7 @@ router.put('/program/:userid', function(req, res, next){
   Program.replaceOne({_id: userid}, req.body, (err, result) =>{
     res.json(result);
   })
-  
+
 });
 
 // Signs up user to program
@@ -218,14 +230,14 @@ router.put('/:userid', [
     //   })
     // })
   next();
-  }, 
+  },
   function(req, res, next){
   let userid = req.params.userid;
   let programid = req.body.programid;
 
   //if(good){
     Program.findByIdAndUpdate(
-      programid, 
+      programid,
       { $inc: { capacity: -1}},
       (err, program) =>{
         User.findById(userid, (err2, user) =>{
@@ -239,7 +251,7 @@ router.put('/:userid', [
   //   console.log("CHECH------------------------------")
   //   res.status(400).json('Error: Time Conflict!')
   // }
-  
+
 }]);
 
 // Logout

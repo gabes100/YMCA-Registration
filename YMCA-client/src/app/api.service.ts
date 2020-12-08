@@ -24,6 +24,10 @@ export class ApiService {
     return this.http.get<Program[]>('/api/programs');
   }
 
+  getUsers() : Observable<User[]>{
+    return this.http.get<User[]>('/api/users');
+  }
+
   createProgram(body) : Observable<Program>{
     return this.http.post<Program>('/api/program', body);
   }
