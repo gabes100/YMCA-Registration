@@ -58,4 +58,8 @@ export class ApiService {
   logout() : Observable<String>{
     return this.http.post<String>('/api/logout', {});
   }
+
+  deleteUser(id) : Observable<User>{
+    return this.http.put<User>('/api/user/' + id, {});
+  }
 }
