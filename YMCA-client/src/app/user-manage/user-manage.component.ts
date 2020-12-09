@@ -39,7 +39,9 @@ export class UserManageComponent implements OnInit {
   }
 
   removeUser(id: string) : void {
-
+    this.api.deleteUser(id).subscribe(user =>{
+      console.log(user);
+    })
   }
 
  
