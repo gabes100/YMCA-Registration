@@ -36,18 +36,21 @@
                 <tbody>
                   <tr *ngFor="let user of users">
                     <ng-container>
-                      <td>{{user.firstName}}</td>
-                      <td>{{user.lastName}}</td>
-                      <td>{{user.username}}</td> 
+                      <td *ngIf="user.active">{{user.firstName}}</td>
+                      <td *ngIf="user.active">{{user.lastName}}</td>
+                      <td *ngIf="user.active">{{user.username}}</td> 
+                      <td *ngIf="!user.active" style="color: red;">{{user.firstName}}</td>
+                      <td *ngIf="!user.active" style="color: red;">{{user.lastName}}</td>
+                      <td *ngIf="!user.active" style="color: red;">{{user.username}}</td> 
                       <td> 
                         <div>
-                          <button *ngIf="!user.staff" class="btn btn-info" data-toggle="modal" (click)="openViewModal(user)" data-target="#programView">View Programs</button>
+                          <button *ngIf="!user.staff && user.active" class="btn btn-info" data-toggle="modal" (click)="openViewModal(user)" data-target="#programView">View Programs</button>
                         </div>
                       </td>
                       <td>
                         <button class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(user)" data-target="#userCreate"><i class="fa fa-cog"></i></button>
                         <button *ngIf="user.active" class="btn btn-danger" data-toggle="modal" (click)="openRemoveModal(user)" data-target="#removeUser"><i class="fa fa-trash"></i></button>  
-                        <button *ngIf="!user.active" class="btn btn-success"><i class="fa fa-plus"></i></button>  
+                        <button *ngIf="!user.active" (click)="makeUserActive(user)"class="btn btn-success"><i class="fa fa-plus"></i></button>  
                       </td>
                     </ng-container>
                   </tr>

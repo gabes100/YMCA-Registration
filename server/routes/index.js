@@ -226,7 +226,6 @@ router.put('/users/:userid', function(req, res, next){
     }
      
     User.replaceOne({_id: userid}, replace, (err, result) =>{
-      console.log(result);
       res.json(result);
     })
   });
@@ -309,6 +308,18 @@ router.put('/user/:userid', function(req, res, next){
             })
        });
       }
+      res.json(user);
+    })
+
+});
+
+// Make user active
+router.put('/userActive/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  User.findByIdAndUpdate(
+    userid,
+    { $set: { active: true}},
+    (err, user) =>{
       res.json(user);
     })
 

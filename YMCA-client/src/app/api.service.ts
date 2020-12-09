@@ -62,4 +62,8 @@ export class ApiService {
   deleteUser(id) : Observable<User>{
     return this.http.put<User>('/api/user/' + id, {});
   }
+
+  makeUserActive(id) : Observable<User>{
+    return this.http.put<User>('/api/userActive/' + id, {});
+  }
 }
