@@ -62,4 +62,8 @@ export class ApiService {
   deleteUser(id) : Observable<User>{
     return this.http.put<User>('/api/user/' + id, {});
   }
+
+  cancelProgram(userid, programid) : Observable<User>{
+    return this.http.put<User>('/api/user/' + userid + '/' + programid, {});
+  }
 }

@@ -139,6 +139,7 @@ export class UserManageComponent implements OnInit {
   /  Passes the data to the modal for removing a user
   */
   openRemoveModal(data: User): void {
+    this.userId = data['_id'];
     this.user = data;
   }
 

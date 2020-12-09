@@ -176,7 +176,9 @@ router.post('/program', function(req, res, next){
 
 // Deletes a program
 router.delete('/program', function(req, res, next){
-  Program.deleteOne({"_id" : req.query.program}, (err, result) => {
+  let programid = req.query.program;
+  User.updateMany({programs: programid}, { $pull: { programs: programid } })
+  Program.deleteOne({"_id" : programid}, (err, result) => {
     if(err){
       res.status(500).send("Error in deleting program");
     }
@@ -298,7 +300,8 @@ router.put('/user/:userid', function(req, res, next){
   let userid = req.params.userid;
   User.findByIdAndUpdate(
     userid,
-    { $set: { active: false}},
+    { $set: { active: false}, $set: { programs: [] }},
+    { returnOriginal: false },
     (err, user) =>{
       user.programs.forEach(prog => {
         Program.findByIdAndUpdate(
@@ -309,7 +312,27 @@ router.put('/user/:userid', function(req, res, next){
       });
       res.json(user);
     })
+});
 
+// Cancel Program
+router.put('/user/:userid/:programid', function(req, res, next){
+  let programid = req.params.programid;
+  let userid = req.params.userid;
+
+  User.findByIdAndUpdate(userid, 
+    { $pull: { programs: programid } }, 
+    { returnOriginal: false },
+    (err, user) =>{
+      res.json(user)
+    })
+  // Program.findByIdAndDelete(programid, (err, result) => {
+  //   if(err){
+  //     res.status(500).send("Error in deleting program");
+  //   }
+  //   else{
+  //     res.json(result);
+  //   }
+  // });
 });
 
 require('./mock')();
