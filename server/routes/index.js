@@ -300,13 +300,15 @@ router.put('/user/:userid', function(req, res, next){
     userid,
     { $set: { active: false}},
     (err, user) =>{
+      if (user) {
       user.programs.forEach(prog => {
         Program.findByIdAndUpdate(
-          prog._id,
-          { $inc: { capacity: 1}},
-          (err, program) =>{
-          })
-      });
+              prog._id,
+            { $inc: { capacity: 1}},
+            (err, program) =>{
+            })
+       });
+      }
       res.json(user);
     })
 

@@ -46,7 +46,8 @@
                       </td>
                       <td>
                         <button class="btn btn-secondary" data-toggle="modal" (click)="openModifyModal(user)" data-target="#userCreate"><i class="fa fa-cog"></i></button>
-                        <button class="btn btn-danger" data-toggle="modal" (click)="openRemoveModal(user)" data-target="#removeUser"><i class="fa fa-trash"></i></button>  
+                        <button *ngIf="user.active" class="btn btn-danger" data-toggle="modal" (click)="openRemoveModal(user)" data-target="#removeUser"><i class="fa fa-trash"></i></button>  
+                        <button *ngIf="!user.active" class="btn btn-success"><i class="fa fa-plus"></i></button>  
                       </td>
                     </ng-container>
                   </tr>

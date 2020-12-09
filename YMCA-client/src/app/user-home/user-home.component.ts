@@ -28,6 +28,18 @@ export class UserHomeComponent implements OnInit {
     this.searchForm = new FormGroup({
       searchInput: new FormControl('')
     });
+
+    if (!this.isStaffView) {
+      this.user = JSON.parse(localStorage.getItem('user-login'));
+    } else {
+      this.user = this.userView;
+    }
+
+    if (this.user) {
+      this.api.getUserPrograms(this.user['_id']).subscribe(programs =>{
+        this.programs = programs;
+      });
+    }
   }
 
   ngOnChanges() : void {
