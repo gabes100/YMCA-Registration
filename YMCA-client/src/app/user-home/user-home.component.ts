@@ -77,4 +77,25 @@ export class UserHomeComponent implements OnInit {
       this.programs = programs;
     });
   }
+
+  cancel(program: Program) : void {
+    this.api.cancelProgram(this.user['_id'], program['_id']).subscribe(
+      user => {
+        alert(program.name + ' successfully canceled');
+        this.updateView();
+      },
+      err =>{
+        alert("Error in canceling program");
+      }
+    )
+  }
+
+  /* updateView
+  /  Updates users from the database
+  */
+  updateView(): void{
+    this.api.getUserPrograms(this.user['_id']).subscribe(programs =>{
+      this.programs = programs;
+    });
+  }
 }

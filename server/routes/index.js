@@ -112,8 +112,8 @@ router.post('/register', function(req, res, next) {
       }
       else{
           let username = req.body.username || '';
-		      let member = req.body.isMember ?? false;
-		      let staff = req.body.isStaff ?? false;
+		      let member = req.body.isMember || false;
+		      let staff = req.body.isStaff || false;
 
           let newUser = {
             firstName : req.body.firstName,
@@ -338,14 +338,12 @@ router.put('/user/:userid/:programid', function(req, res, next){
     (err, user) =>{
       res.json(user)
     })
-  // Program.findByIdAndDelete(programid, (err, result) => {
-  //   if(err){
-  //     res.status(500).send("Error in deleting program");
-  //   }
-  //   else{
-  //     res.json(result);
-  //   }
-  // });
+
+    Program.findByIdAndUpdate(
+      programid,
+    { $inc: { capacity: 1}},
+    (err, program) =>{
+    })
 });
 
 require('./mock')();

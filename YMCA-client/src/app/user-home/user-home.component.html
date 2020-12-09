@@ -36,7 +36,7 @@
                         <td>{{program.day}}</td> 
                         <td>{{program.startTime}} - {{program.endTime}}</td>
                         <td>{{program.startDate}} - {{program.endDate}}</td>
-                        <td><button class="btn btn-danger">Cancel</button></td>
+                        <td><button class="btn btn-danger" (click)="cancel(program)">Cancel</button></td>
                     </tr>
                 </tbody>
             </table>
