@@ -299,7 +299,7 @@ router.put('/user/:userid', function(req, res, next){
   let userid = req.params.userid;
   User.findByIdAndUpdate(
     userid,
-    { $set: { active: false}, $set: { programs: [] }},
+    { $set: { active: false, programs : []}},
     { returnOriginal: false },
     (err, user) =>{
       if (user) {
