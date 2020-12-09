@@ -16,6 +16,7 @@ export class UserManageComponent implements OnInit {
   users: User[];
   isModding: boolean;
   userId: any;
+  user: User;
 
   constructor(
     private router : Router,
@@ -25,17 +26,68 @@ export class UserManageComponent implements OnInit {
   ngOnInit(): void {
     
     this.searchForm = new FormGroup({
-      searchInput: new FormControl('')
+      searchFirst: new FormControl(''),
+      searchLast: new FormControl('')
+    });
+
+    this.userForm = new FormGroup({
+      firstName: new FormControl(''),
+      lastName: new FormControl(''),
+      username: new FormControl(''),
+      password: new FormControl(''),
+      isStaff: new FormControl(''),
+      isMember: new FormControl('')
     });
 
     this.isModding = false;
+    this.user = null;
 
     this.updateView();
   }
 
+  attemptRegister(){
+    const username = this.userForm.get('username').value;
+    const firstName = this.userForm.get('firstName').value;
+    const lastName = this.userForm.get('lastName').value;
+    const password = this.userForm.get('password').value;
+    const isStaff:Boolean = this.userForm.get('isStaff').value;
+    const isMember:Boolean = this.userForm.get('isMember').value;
 
-  updateOrCreateProgram() : void {
+    if(username && firstName && lastName){
+      let credentials = {
+        username : username, 
+        firstName : firstName,
+        lastName : lastName,
+        isStaff : isStaff,
+        password : password,
+        isMember : isMember
+      };
 
+      if (this.isModding) {
+        this.api.modifyUser(this.userId, credentials).subscribe(
+          user => {
+            alert("User Updated");
+          },
+          err =>{
+            alert("Error updating user");
+            }
+          );
+      } else {
+      this.api.register(credentials).subscribe(
+        user => {
+          alert("User Created");
+        },
+        err =>{
+          alert("Username already taken");
+          }
+        );
+      }
+    }
+    else{
+      alert("Please enter all fields");
+    }
+
+    this.updateView();
   }
 
   removeUser(id: string) : void {
@@ -56,11 +108,21 @@ export class UserManageComponent implements OnInit {
   / Search users by name
   */
   searchByName() : void {
-    const searchString = this.searchForm.get("searchInput").value?.toString().toLowerCase();
-    if (searchString) {
-      const result = this.users.filter(user => user.firstName.toLowerCase().includes(searchString));
-      this.users = result;
+    const searchFirst = this.searchForm.get("searchFirst").value?.toString().toLowerCase();
+    const searchLast = this.searchForm.get("searchLast").value?.toString().toLowerCase();
+
+    let result = this.users;
+
+    if (searchFirst) {
+      result = result.filter(user => user.firstName.toLowerCase().includes(searchFirst));
     }
+
+    if (searchLast) {
+      result = result.filter(user => user.lastName.toLowerCase().includes(searchLast));
+     
+    }
+
+    this.users = result;
   }
 
   /* clearFilter
@@ -75,7 +137,7 @@ export class UserManageComponent implements OnInit {
   /  Passes the data to the modal for removing a user
   */
   openRemoveModal(data: User): void {
-    this.userId = data['_id'];
+    this.user = data;
   }
 
   /* openCreateModal
@@ -91,6 +153,18 @@ export class UserManageComponent implements OnInit {
   openModifyModal(data : User): void {
     this.userId = data['_id'];
     this.isModding = true;
+
+    this.userForm.patchValue({
+      username : data.username,
+      firstName : data.firstName,
+      lastName : data.lastName,
+      isStaff : data.staff,
+      isMember : data.member
+    });
+  }
+
+  openViewModal(data : User): void {
+    this.user = data;
   }
 
   /* resetForm

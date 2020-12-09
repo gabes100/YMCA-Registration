@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { DataService } from '../data.service';
 import { User } from '../user';
 import { Program } from '../program';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-home',
@@ -13,6 +14,10 @@ import { Program } from '../program';
 export class UserHomeComponent implements OnInit {
   user: User;
   programs : Program[];
+  searchForm: FormGroup;
+  
+  @Input() isStaffView: boolean = false;
+  @Input() userView: User;
 
   constructor( 
     private router : Router,
@@ -20,11 +25,44 @@ export class UserHomeComponent implements OnInit {
     private data : DataService) { }
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem('user-login'));
+    this.searchForm = new FormGroup({
+      searchInput: new FormControl('')
+    });
+  }
+
+  ngOnChanges() : void {
+    if (!this.isStaffView) {
+      this.user = JSON.parse(localStorage.getItem('user-login'));
+    } else {
+      this.user = this.userView;
+    }
+
+    if (this.user) {
+      this.api.getUserPrograms(this.user['_id']).subscribe(programs =>{
+        this.programs = programs;
+      });
+    }
+  }
+
+  /* searchByName
+  / Search programs by name
+  */
+ searchByName() : void {
+  const searchString = this.searchForm.get("searchInput").value?.toString().toLowerCase();
+  if (searchString) {
+    const result = this.programs.filter(program => program.name.toLowerCase().includes(searchString));
+    this.programs = result;
+  }
+}
+
+  /* clearFilter
+  / clears the search filter
+  */
+  clearFilter() : void {
+    this.searchForm.reset();
 
     this.api.getUserPrograms(this.user['_id']).subscribe(programs =>{
       this.programs = programs;
     });
   }
-
 }
