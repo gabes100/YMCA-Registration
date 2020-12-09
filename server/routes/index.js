@@ -228,7 +228,6 @@ router.put('/users/:userid', function(req, res, next){
     }
      
     User.replaceOne({_id: userid}, replace, (err, result) =>{
-      console.log(result);
       res.json(result);
     })
   });
@@ -303,13 +302,27 @@ router.put('/user/:userid', function(req, res, next){
     { $set: { active: false}, $set: { programs: [] }},
     { returnOriginal: false },
     (err, user) =>{
+      if (user) {
       user.programs.forEach(prog => {
         Program.findByIdAndUpdate(
-          prog._id,
-          { $inc: { capacity: 1}},
-          (err, program) =>{
-          })
-      });
+              prog._id,
+            { $inc: { capacity: 1}},
+            (err, program) =>{
+            })
+       });
+      }
+      res.json(user);
+    })
+
+});
+
+// Make user active
+router.put('/userActive/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  User.findByIdAndUpdate(
+    userid,
+    { $set: { active: true}},
+    (err, user) =>{
       res.json(user);
     })
 });

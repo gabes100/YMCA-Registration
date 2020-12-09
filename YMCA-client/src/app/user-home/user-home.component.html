@@ -1,6 +1,6 @@
 <div class="container container-top">
     <div class="card main">
-        <div *ngif="!isStaffView" class="card-header">
+        <div *ngIf="!isStaffView" class="card-header">
             <h3  style="text-align: center;"><strong>My Programs</strong></h3>
             <button class="btn btn-primary pull-right" [routerLink]="['/home']">More Programs</button>
         </div>

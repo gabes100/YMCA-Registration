@@ -91,9 +91,8 @@ export class UserManageComponent implements OnInit {
   }
 
   removeUser(id: string) : void {
-    this.api.deleteUser(id).subscribe(user =>{
-      console.log(user);
-    })
+    this.api.deleteUser(id).subscribe();
+    this.updateView();
   }
 
  
@@ -141,6 +140,15 @@ export class UserManageComponent implements OnInit {
   openRemoveModal(data: User): void {
     this.userId = data['_id'];
     this.user = data;
+    this.userId = data['_id'];
+  }
+
+  makeUserActive(data: User): void {
+    this.user = data;
+    this.userId = data['_id'];
+
+    this.api.makeUserActive(this.userId).subscribe();
+    this.updateView();
   }
 
   /* openCreateModal
@@ -154,6 +162,7 @@ export class UserManageComponent implements OnInit {
   /  Passes the data to the modal for modifing a user as well as patching values to the form
   */
   openModifyModal(data : User): void {
+    this.user = data;
     this.userId = data['_id'];
     this.isModding = true;
 

@@ -66,4 +66,8 @@ export class ApiService {
   cancelProgram(userid, programid) : Observable<User>{
     return this.http.put<User>('/api/user/' + userid + '/' + programid, {});
   }
+  
+  makeUserActive(id) : Observable<User>{
+    return this.http.put<User>('/api/userActive/' + id, {});
+  }
 }
