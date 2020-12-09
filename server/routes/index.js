@@ -111,18 +111,17 @@ router.post('/register', function(req, res, next) {
         res.status(402).json();
       }
       else{
-          let firstName = req.body.firstName || '';
-          let lastName = req.body.lastName || '';
           let username = req.body.username || '';
-          let password = req.body.password || '';
+		      let member = req.body.isMember ?? false;
+		      let staff = req.body.isStaff ?? false;
 
           let newUser = {
             firstName : req.body.firstName,
             lastName : req.body.lastName,
             username : req.body.username,
             password : bcrypt.hashSync(req.body.password, 10),
-            member : false,
-            staff : false
+            member : member,
+            staff : staff,
           }
 
           User.findOne({username : username}, (err, user) => {
@@ -208,6 +207,27 @@ router.put('/program/:userid', function(req, res, next){
     res.json(result);
   })
 
+});
+
+// Updates a user
+router.put('/users/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  User.findById(userid, (err, user) => {
+    
+    let replace = {
+      firstName: req.body.firstName,
+      username: req.body.username,
+      lastName: req.body.lastName,
+      member: req.body.isMember,
+      staff: req.body.isStaff,
+      password: user.password
+    }
+     
+    User.replaceOne({_id: userid}, replace, (err, result) =>{
+      console.log(result);
+      res.json(result);
+    })
+  });
 });
 
 // Signs up user to program
