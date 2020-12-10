@@ -30,7 +30,7 @@ let isOverLap = function(prog, newProg){
 
   var date1 = [moment(progStart), moment(progEnd)];
   var date2 = [moment(newStart), moment(newEnd)];
-  
+
   var progRange  = moment.range(date1);
   var newProgRange = moment.range(date2);
 
@@ -74,7 +74,7 @@ router.post('/login', function(req, res, next) {
           let password = req.body.password || '';
 
           User.findOne({username : username}, (err, user) => {
-              if(err || !user) {
+              if(err || !user || user.active == false) {
                 res.status(402).json();
               }
               else{
@@ -94,7 +94,7 @@ router.post('/login', function(req, res, next) {
                         staff : user.staff,
                         programs : user.programs
                     };
-  
+
                     res.json(userNoPassword);
                   }
                 });
@@ -111,18 +111,18 @@ router.post('/register', function(req, res, next) {
         res.status(402).json();
       }
       else{
-          let firstName = req.body.firstName || '';
-          let lastName = req.body.lastName || '';
           let username = req.body.username || '';
-          let password = req.body.password || '';
+		      let member = req.body.isMember || false;
+		      let staff = req.body.isStaff || false;
 
           let newUser = {
             firstName : req.body.firstName,
             lastName : req.body.lastName,
             username : req.body.username,
             password : bcrypt.hashSync(req.body.password, 10),
-            member : false,
-            staff : false
+            member : member,
+            staff : staff,
+            active : true
           }
 
           User.findOne({username : username}, (err, user) => {
@@ -155,6 +155,18 @@ router.get('/programs', function(req, res, next){
   });
 });
 
+// Gets the users
+router.get('/users', function(req, res, next){
+  User.find({}, (err, users) => {
+    if(err){
+      res.status(500).send("Error in users");
+    }
+    else{
+      res.json(users)
+    }
+  });
+});
+
 // Creates a new program
 router.post('/program', function(req, res, next){
   let program = new Program(req.body);
@@ -164,7 +176,9 @@ router.post('/program', function(req, res, next){
 
 // Deletes a program
 router.delete('/program', function(req, res, next){
-  Program.deleteOne({"_id" : req.query.program}, (err, result) => {
+  let programid = req.query.program;
+  User.updateMany({programs: programid}, { $pull: { programs: programid } })
+  Program.deleteOne({"_id" : programid}, (err, result) => {
     if(err){
       res.status(500).send("Error in deleting program");
     }
@@ -195,7 +209,28 @@ router.put('/program/:userid', function(req, res, next){
   Program.replaceOne({_id: userid}, req.body, (err, result) =>{
     res.json(result);
   })
-  
+
+});
+
+// Updates a user
+router.put('/users/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  User.findById(userid, (err, user) => {
+    
+    let replace = {
+      firstName: req.body.firstName,
+      username: req.body.username,
+      lastName: req.body.lastName,
+      member: req.body.isMember,
+      staff: req.body.isStaff,
+      password: user.password,
+      active : true
+    }
+     
+    User.replaceOne({_id: userid}, replace, (err, result) =>{
+      res.json(result);
+    })
+  });
 });
 
 // Signs up user to program
@@ -205,27 +240,37 @@ router.put('/:userid', [
     // let programid = req.body.programid;
     // let good = true;
 
-    // Program.findById(programid, (err1, newProg)=>{
+    // Program.findById(programid, (err1, foundProg)=>{
     //   User.findById(userid, (err2, user) =>{
-    //     user.programs.forEach(progId =>{
+    //     for (progId of user.programs){
     //       Program.findById(progId, (err3, prog)=>{
-    //         if(isOverLap(prog, newProg)){
+    //         if(isOverLap(prog, foundProg)){
     //           res.status(400).json('Error: Time Conflict!')
     //           req.end();
     //         }
     //       })
-    //     })
+    //     }
+        
+        
+    //     // user.programs.forEach(progId =>{
+    //     //   Program.findById(progId, (err3, prog)=>{
+    //     //     if(!isOverLap(prog, foundProg) && programid == foundProg._id){
+    //     //       res.status(400).json('Error: Time Conflict!')
+    //     //       req.end();
+    //     //     }
+    //     //   })
+    //     // })
     //   })
     // })
   next();
-  }, 
+  },
   function(req, res, next){
   let userid = req.params.userid;
   let programid = req.body.programid;
 
   //if(good){
     Program.findByIdAndUpdate(
-      programid, 
+      programid,
       { $inc: { capacity: -1}},
       (err, program) =>{
         User.findById(userid, (err2, user) =>{
@@ -239,7 +284,7 @@ router.put('/:userid', [
   //   console.log("CHECH------------------------------")
   //   res.status(400).json('Error: Time Conflict!')
   // }
-  
+
 }]);
 
 // Logout
@@ -247,6 +292,58 @@ router.post('/logout', (req, res, next) => {
   req.session.destroy((err) =>{
     res.json("success");
   });
+});
+
+// Delete user
+router.put('/user/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  User.findByIdAndUpdate(
+    userid,
+    { $set: { active: false, programs : []}},
+    { returnOriginal: false },
+    (err, user) =>{
+      if (user) {
+      user.programs.forEach(prog => {
+        Program.findByIdAndUpdate(
+              prog._id,
+            { $inc: { capacity: 1}},
+            (err, program) =>{
+            })
+       });
+      }
+      res.json(user);
+    })
+
+});
+
+// Make user active
+router.put('/userActive/:userid', function(req, res, next){
+  let userid = req.params.userid;
+  User.findByIdAndUpdate(
+    userid,
+    { $set: { active: true}},
+    (err, user) =>{
+      res.json(user);
+    })
+});
+
+// Cancel Program
+router.put('/user/:userid/:programid', function(req, res, next){
+  let programid = req.params.programid;
+  let userid = req.params.userid;
+
+  User.findByIdAndUpdate(userid, 
+    { $pull: { programs: programid } }, 
+    { returnOriginal: false },
+    (err, user) =>{
+      res.json(user)
+    })
+
+    Program.findByIdAndUpdate(
+      programid,
+    { $inc: { capacity: 1}},
+    (err, program) =>{
+    })
 });
 
 require('./mock')();

@@ -19,9 +19,17 @@ export class ApiService {
   register(credentials) : Observable<User>{
     return this.http.post<User>('/api/register', credentials);
   }
+  
+  modifyUser(id, body) : Observable<User>{
+    return this.http.put<User>('/api/users/' + id, body);
+  }
 
   getPrograms() : Observable<Program[]>{
     return this.http.get<Program[]>('/api/programs');
+  }
+
+  getUsers() : Observable<User[]>{
+    return this.http.get<User[]>('/api/users');
   }
 
   createProgram(body) : Observable<Program>{
@@ -49,5 +57,17 @@ export class ApiService {
 
   logout() : Observable<String>{
     return this.http.post<String>('/api/logout', {});
+  }
+
+  deleteUser(id) : Observable<User>{
+    return this.http.put<User>('/api/user/' + id, {});
+  }
+
+  cancelProgram(userid, programid) : Observable<User>{
+    return this.http.put<User>('/api/user/' + userid + '/' + programid, {});
+  }
+  
+  makeUserActive(id) : Observable<User>{
+    return this.http.put<User>('/api/userActive/' + id, {});
   }
 }

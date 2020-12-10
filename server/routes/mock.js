@@ -13,7 +13,8 @@ async function mockUser(){
             firstName : "Tim",
             lastName : "Thoman",
             member : false,
-            staff : true
+            staff : true,
+            active : true
         },
         {
             username : "veldboom.gabriel",
@@ -21,7 +22,8 @@ async function mockUser(){
             firstName : "Gabriel",
             lastName : "Veldboom",
             member : false,
-            staff : true
+            staff : true,
+            active : true
         },
         {
             username : "doe.john",
@@ -29,7 +31,8 @@ async function mockUser(){
             firstName : "John",
             lastName : "Doe",
             member : true,
-            staff : false
+            staff : false,
+            active : true
         },
         {
             username : "anderson.luke",
@@ -37,7 +40,8 @@ async function mockUser(){
             firstName : "Luke",
             lastName : "Anderson",
             member : false,
-            staff : false
+            staff : false,
+            active : true
         },
 		{
             username : "anderson.aini",
@@ -45,7 +49,8 @@ async function mockUser(){
             firstName : "Aini",
             lastName : "Anderson",
             member : true,
-            staff : false
+            staff : false,
+            active : true
         },
 		{
             username : "doe.jane",
@@ -53,7 +58,8 @@ async function mockUser(){
             firstName : "Jane",
             lastName : "Doe",
             member : true,
-            staff : false
+            staff : false,
+            active : true
         }
 
 

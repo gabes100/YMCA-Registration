@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   programs : Program[];
   programForm: FormGroup;
   programViewForm: FormGroup;
+  searchForm: FormGroup;
   programId : string;
   signedUp: Program[];
   
@@ -73,6 +74,11 @@ export class HomeComponent implements OnInit {
       fee: new FormControl(''),
       capacity: new FormControl(''),
     });
+
+    this.searchForm = new FormGroup({
+      searchInput: new FormControl('')
+    });
+    
   }
 
   /* signUp
@@ -124,6 +130,25 @@ export class HomeComponent implements OnInit {
   }
    this.updateView();
  }
+
+  /* searchByName
+  / Search programs by name
+  */
+  searchByName() : void {
+    const searchString = this.searchForm.get("searchInput").value?.toString().toLowerCase();
+    if (searchString) {
+      const result = this.programs.filter(program => program.name.toLowerCase().includes(searchString));
+      this.programs = result;
+    }
+  }
+
+   /* clearFilter
+   / clears the search filter
+  */
+  clearFilter() : void {
+    this.resetForm(this.searchForm);
+    this.updateView();
+  }
 
   /* updateView
   /  Updates programs from the database

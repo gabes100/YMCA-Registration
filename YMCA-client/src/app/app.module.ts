@@ -11,6 +11,8 @@ import { RegisterComponent } from './register/register.component';
 import { ProfileNavComponent } from './profile-nav/profile-nav.component';
 import { HomeComponent } from './home/home.component';
 import { UserHomeComponent } from './user-home/user-home.component';
+import { UserManageComponent } from './user-manage/user-manage.component';
+import { HelpComponent } from './help/help.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { UserHomeComponent } from './user-home/user-home.component';
     RegisterComponent,
     ProfileNavComponent,
     HomeComponent,
-    UserHomeComponent
+    UserHomeComponent,
+    UserManageComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule,
